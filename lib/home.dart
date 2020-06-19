@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
+import 'package:todoapps/Authentication/AuthService.dart';
+import 'package:todoapps/Authentication/Wrapper.dart';
 
 import 'NextPage.dart';
+import 'ToDo.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,33 +14,54 @@ class _HomeState extends State<Home> {
   var list;
 
   var count;
+  final _auth = AuthService();
 
   @override
   void initState() {
     super.initState();
-    this.list = list = new ListView();
-    this.count = 0;
+    this.list = new ListView();
+    this.count = 10;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Text("Todo List"),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text("Todo List"),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.blue,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.power_settings_new),
+              onPressed: () {
+                _auth.signOutGoogle();
+                setState(() {
+
+                });
+              },
+            )
+          ],
         ),
-        centerTitle: true,
-        backgroundColor: Colors.blue,
-      ),
-      body: getListView(),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          routeToNextPage("Add Note");
-        },
-        backgroundColor: Colors.blue,
-        child: new Icon(Icons.add),
-        tooltip: "Add New List",
+//        drawer: Drawer(
+//          child: DrawerHeader(
+//            child: Text("test"),
+//          ),
+//        ),
+        body: getListView(),
+        floatingActionButton: new FloatingActionButton(
+          onPressed: () {
+            //routeToNextPage("Add Note");
+          },
+          backgroundColor: Colors.blue,
+          child: new Icon(Icons.add),
+          tooltip: "Add New List",
+        ),
       ),
     );
   }
@@ -56,7 +80,13 @@ class _HomeState extends State<Home> {
               title: Text("Nothing"),
               subtitle: Text("Dummy"),
               onTap: () {
-                routeToNextPage("Edit Note");
+                return showDialog(
+                    context: context,
+                    builder: (context) {
+                      return SimpleDialog(
+                        title: Text("Nothing"),
+                      );
+                    });
               },
             ),
           );
