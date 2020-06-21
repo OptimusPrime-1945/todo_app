@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:async/async.dart';
 
 class DataBaseHelper {
   static DataBaseHelper _dataBaseHelper;

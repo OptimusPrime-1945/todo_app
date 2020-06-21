@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:todoapps/Authentication/AuthService.dart';
+import 'package:todoapps/Authentication/Wrapper.dart';
 import 'package:todoapps/TextForm.dart';
 
 import 'NextPage.dart';
 
 class Home extends StatefulWidget {
+  final uid;
+
+  Home({Key key, this.uid}) : super(key: key);
+
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(uid);
 }
 
 class _HomeState extends State<Home> {
@@ -16,8 +21,15 @@ class _HomeState extends State<Home> {
   final _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   Firestore _firestore = Firestore();
+  final AuthService _authService = AuthService();
 
   TextEditingController todoTitleController = TextEditingController();
+
+  var uid;
+
+  _HomeState(uid) {
+    this.uid = uid;
+  }
 
   @override
   void initState() {
@@ -28,7 +40,12 @@ class _HomeState extends State<Home> {
   createTodos(String input) {
     DocumentReference documentReference =
         Firestore.instance.collection("todos").document(input);
-    Map<String, dynamic> todos = {"todoTitle": input, "status": false};
+    Map<String, dynamic> todos = {
+      "todoTitle": input,
+      "status": false,
+      "description": "",
+      "uid": uid,
+    };
     documentReference.setData(todos).whenComplete(() => print("Created"));
   }
 
@@ -50,16 +67,19 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.power_settings_new),
               onPressed: () {
                 _auth.signOutGoogle();
-                setState(() {});
+                return Wrapper();
+                setState(() {
+
+                });
               },
             )
           ],
         ),
-//        drawer: Drawer(
-//          child: DrawerHeader(
-//            child: Text("test"),
-//          ),
-//        ),
+        drawer: Drawer(
+          child: DrawerHeader(
+            child: Text("test"),
+          ),
+        ),
         body: StreamBuilder(
           stream: Firestore.instance.collection("todos").snapshots(),
           builder: (context, snapshot) {
@@ -154,7 +174,8 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 textForm("Enter Todo", todoTitleController),
                 Align(
-                  child: FlatButton(
+                  child: RaisedButton(
+                    shape: StadiumBorder(),
                     child: Text("Add"),
                     onPressed: () {
                       createTodos(todoTitleController.text);

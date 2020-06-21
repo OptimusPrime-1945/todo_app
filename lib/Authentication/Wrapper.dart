@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapps/Authentication/AuthService.dart';
+import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/home.dart';
 
 class Wrapper extends StatefulWidget {
@@ -40,9 +41,12 @@ class _WrapperState extends State<Wrapper> {
     return OutlineButton(
       onPressed: () async {
         dynamic result = await _authService.signInWithGoogle();
+        print(result.uid);
         if (result != null) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => Home()));
+          DataBaseService().updateUserData(
+              email: result.email, name: result.displayName, uid: result.uid);
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => Home(uid: result.uid)));
         }
         return Wrapper();
       },
