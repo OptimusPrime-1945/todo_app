@@ -4,7 +4,7 @@ class ToDo {
   String description;
   String uid;
 
-  ToDo({this.todoTitle, this.status, this.description});
+  ToDo({this.todoTitle, this.status, this.description, this.uid});
 
   factory ToDo.fromMap(Map data) {
     return ToDo(

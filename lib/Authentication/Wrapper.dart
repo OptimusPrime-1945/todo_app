@@ -10,27 +10,31 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
   final AuthService _authService = AuthService();
+  final DataBaseService _dataBaseService = DataBaseService();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(
-        title: Text("TODO"),
-        centerTitle: true,
-      ),
-
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              FlutterLogo(
-                size: 50,
-              ),
-              SizedBox(),
-              _signInButton(),
-            ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: new AppBar(
+          title: Text("TODO"),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
+        body: Container(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                FlutterLogo(
+                  size: 50,
+                ),
+                SizedBox(),
+                _signInButton(),
+              ],
+            ),
           ),
         ),
       ),
@@ -41,12 +45,12 @@ class _WrapperState extends State<Wrapper> {
     return OutlineButton(
       onPressed: () async {
         dynamic result = await _authService.signInWithGoogle();
-        print(result.uid);
         if (result != null) {
-          DataBaseService().updateUserData(
+          _dataBaseService.updateUserData(
               email: result.email, name: result.displayName, uid: result.uid);
+          print(result.uid);
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => Home(uid: result.uid)));
+              MaterialPageRoute(builder: (context) => Home(result.uid)));
         }
         return Wrapper();
       },
