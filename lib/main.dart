@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todoapps/Authentication/Wrapper.dart';
+
 import 'home.dart';
 
 void main() => runApp(TODO());
@@ -13,11 +13,14 @@ class _TODOState extends State<TODO> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Wrapper(),
+      home: Home(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.blue,
         accentColor: Colors.blueAccent,
+        buttonColor: Colors.blue,
+        buttonTheme: const ButtonThemeData(
+            textTheme: ButtonTextTheme.primary, buttonColor: Colors.blue),
       ),
     );
   }

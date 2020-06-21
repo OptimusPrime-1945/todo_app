@@ -1,9 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:todoapps/Authentication/AuthService.dart';
-import 'package:todoapps/Authentication/Wrapper.dart';
 
 import 'NextPage.dart';
-import 'ToDo.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,15 +11,23 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var list;
-
   var count;
   final _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  String input = "";
+  Firestore _firestore = Firestore();
 
   @override
   void initState() {
     super.initState();
     this.list = new ListView();
-    this.count = 10;
+  }
+
+  createTodos() {
+    DocumentReference documentReference =
+        Firestore.instance.collection("todos").document(input);
+    Map<String, dynamic> todos = {"todoTitle": input, "status": false};
+    documentReference.setData(todos).whenComplete(() => print("Created"));
   }
 
   @override
@@ -41,9 +48,7 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.power_settings_new),
               onPressed: () {
                 _auth.signOutGoogle();
-                setState(() {
-
-                });
+                setState(() {});
               },
             )
           ],
@@ -53,10 +58,59 @@ class _HomeState extends State<Home> {
 //            child: Text("test"),
 //          ),
 //        ),
-        body: getListView(),
+        body: StreamBuilder(
+          stream: Firestore.instance.collection("todos").snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return Text("Yay No Todos Left");
+            return Card(
+              child: ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) =>
+                    _listItemBuilder(
+                      context,
+                      snapshot.data.documents[index],
+                    ),
+              ),
+            );
+          },
+        ),
         floatingActionButton: new FloatingActionButton(
           onPressed: () {
-            //routeToNextPage("Add Note");
+            showDialog(
+              context: context,
+              builder: (context) =>
+                  Form(
+                    key: _formKey,
+                    child: SimpleDialog(
+                      title: Center(child: Text("Add Todo")),
+                      children: <Widget>[
+                        TextFormField(
+                          onChanged: (val) {
+                            setState(() {
+                              input = val;
+                            });
+                          },
+                          validator: (val) => val.isEmpty ? "Enter Todo" : null,
+                          decoration: InputDecoration(
+                            labelText: "Enter Todo",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          child: FlatButton(
+                            child: Text("Add"),
+                            onPressed: () {
+                              createTodos();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+            );
           },
           backgroundColor: Colors.blue,
           child: new Icon(Icons.add),
@@ -66,36 +120,40 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget getListView() {
-    return ListView.builder(
-        itemCount: this.count,
-        itemBuilder: (BuildContext context, int position) {
-          return Card(
-            color: Colors.white,
-            elevation: 2.0,
-            child: ListTile(
-              leading: CircleAvatar(
-                child: Icon(Icons.keyboard_arrow_right),
-              ),
-              title: Text("Nothing"),
-              subtitle: Text("Dummy"),
-              onTap: () {
-                return showDialog(
-                    context: context,
-                    builder: (context) {
-                      return SimpleDialog(
-                        title: Text("Nothing"),
-                      );
-                    });
-              },
-            ),
-          );
-        });
-  }
-
   void routeToNextPage(String title) async {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext Content) => new NextPage(title),
     ));
+  }
+
+  Widget _listItemBuilder(BuildContext context,
+      DocumentSnapshot documentSnapshot) {
+    return GestureDetector(
+      onTap: () =>
+          showDialog(
+            context: context,
+            builder: (context) => _dialogBuilder(context, documentSnapshot),
+          ),
+      child: Card(
+        child: ListTile(
+          title: Text(documentSnapshot['todoTitle'].toString()),
+          leading: Icon(Icons.arrow_right),
+          trailing: Icon(Icons.delete),
+          onTap: () {},
+        ),
+      ),
+    );
+  }
+
+  Widget _dialogBuilder(BuildContext context,
+      DocumentSnapshot documentSnapshot) {
+    return SimpleDialog(
+      contentPadding: EdgeInsets.zero,
+      children: <Widget>[
+        Text(documentSnapshot['todoTitle']),
+        SizedBox(height: 10),
+        Text("Pending ${documentSnapshot['status']}")
+      ],
+    );
   }
 }
