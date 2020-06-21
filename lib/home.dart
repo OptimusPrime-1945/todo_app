@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:todoapps/Authentication/AuthService.dart';
+import 'package:todoapps/TextForm.dart';
 
 import 'NextPage.dart';
 
@@ -14,8 +15,9 @@ class _HomeState extends State<Home> {
   var count;
   final _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-  String input = "";
   Firestore _firestore = Firestore();
+
+  TextEditingController todoTitleController = TextEditingController();
 
   @override
   void initState() {
@@ -23,7 +25,7 @@ class _HomeState extends State<Home> {
     this.list = new ListView();
   }
 
-  createTodos() {
+  createTodos(String input) {
     DocumentReference documentReference =
         Firestore.instance.collection("todos").document(input);
     Map<String, dynamic> todos = {"todoTitle": input, "status": false};
@@ -62,56 +64,18 @@ class _HomeState extends State<Home> {
           stream: Firestore.instance.collection("todos").snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return Text("Yay No Todos Left");
-            return Card(
-              child: ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) =>
-                    _listItemBuilder(
-                      context,
-                      snapshot.data.documents[index],
-                    ),
-              ),
+            return ListView.builder(
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) =>
+                  _listItemBuilder(
+                    context,
+                    snapshot.data.documents[index],
+                  ),
             );
           },
         ),
         floatingActionButton: new FloatingActionButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) =>
-                  Form(
-                    key: _formKey,
-                    child: SimpleDialog(
-                      title: Center(child: Text("Add Todo")),
-                      children: <Widget>[
-                        TextFormField(
-                          onChanged: (val) {
-                            setState(() {
-                              input = val;
-                            });
-                          },
-                          validator: (val) => val.isEmpty ? "Enter Todo" : null,
-                          decoration: InputDecoration(
-                            labelText: "Enter Todo",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          child: FlatButton(
-                            child: Text("Add"),
-                            onPressed: () {
-                              createTodos();
-                              Navigator.pop(context);
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-            );
-          },
+          onPressed: () => _floatingButtonCard(),
           backgroundColor: Colors.blue,
           child: new Icon(Icons.add),
           tooltip: "Add New List",
@@ -128,32 +92,80 @@ class _HomeState extends State<Home> {
 
   Widget _listItemBuilder(BuildContext context,
       DocumentSnapshot documentSnapshot) {
-    return GestureDetector(
-      onTap: () =>
-          showDialog(
-            context: context,
-            builder: (context) => _dialogBuilder(context, documentSnapshot),
-          ),
-      child: Card(
-        child: ListTile(
-          title: Text(documentSnapshot['todoTitle'].toString()),
-          leading: Icon(Icons.arrow_right),
-          trailing: Icon(Icons.delete),
-          onTap: () {},
+    return Card(
+      child: ListTile(
+        title: Text(
+          documentSnapshot['todoTitle'].toString(),
         ),
+        leading: CircleAvatar(
+          child: Icon(Icons.update),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                print("Deleted");
+              },
+            ),
+          ],
+        ),
+        onTap: () =>
+            showDialog(
+              context: context,
+              builder: (context) => _dialogBuilder(context, documentSnapshot),
+            ),
       ),
     );
   }
 
   Widget _dialogBuilder(BuildContext context,
       DocumentSnapshot documentSnapshot) {
-    return SimpleDialog(
-      contentPadding: EdgeInsets.zero,
-      children: <Widget>[
-        Text(documentSnapshot['todoTitle']),
-        SizedBox(height: 10),
-        Text("Pending ${documentSnapshot['status']}")
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: SimpleDialog(
+          contentPadding: EdgeInsets.zero,
+          elevation: 10.0,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Text(documentSnapshot['todoTitle']),
+                SizedBox(height: 10),
+                Text("Pending ${documentSnapshot['status']}")
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _floatingButtonCard() {
+    return showDialog(
+      context: context,
+      builder: (context) =>
+          Form(
+            key: _formKey,
+            child: SimpleDialog(
+              title: Center(child: Text("Add Todo")),
+              children: <Widget>[
+                textForm("Enter Todo", todoTitleController),
+                Align(
+                  child: FlatButton(
+                    child: Text("Add"),
+                    onPressed: () {
+                      createTodos(todoTitleController.text);
+                      todoTitleController.text = "";
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
     );
   }
 }
