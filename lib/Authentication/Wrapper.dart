@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapps/Authentication/AuthService.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
+import 'package:todoapps/Database/User.dart';
 import 'package:todoapps/home.dart';
 
 class Wrapper extends StatefulWidget {
@@ -44,13 +46,12 @@ class _WrapperState extends State<Wrapper> {
   Widget _signInButton() {
     return OutlineButton(
       onPressed: () async {
-        dynamic result = await _authService.signInWithGoogle();
-        if (result != null) {
+        FirebaseUser user = await _authService.signInWithGoogle();
+        if (user != null) {
           _dataBaseService.updateUserData(
-              email: result.email, name: result.displayName, uid: result.uid);
-          print(result.uid);
+              email: user.email, name: user.displayName, uid: user.uid);
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => Home(result.uid)));
+              MaterialPageRoute(builder: (context) => Home(User(user: user))));
         }
         return Wrapper();
       },

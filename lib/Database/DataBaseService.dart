@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapps/Database/ToDo.dart';
 
@@ -10,18 +9,6 @@ class DataBaseService {
   DataBaseService.name(this.uid);
 
   DataBaseService();
-
-  Future<ToDo> getTodos(String uid) async {
-    _dataBase
-        .collection("todos")
-        .document(uid)
-        .snapshots()
-        .map((snap) => ToDo.fromMap(snap.data));
-  }
-
-  Stream<List<ToDo>> streamToDos(FirebaseUser user) {
-    // return _dataBase.collection("todos").document(user.uid);
-  }
 
   Future updateUserData(
       {@required String uid,
@@ -52,9 +39,17 @@ class DataBaseService {
     }).toList();
   }
 
+//  Stream<User> get user {
+//    return _dataBase.collection("users").document().snapshots().map((event) =>
+//        User(
+//            uid: event.data['uid'],
+//            name: event.data['name'],
+//            email: event.data['email']));
+//  }
+
   createTodos(String title, String descrption, String uid) {
     DocumentReference documentReference =
-        Firestore.instance.collection("todos").document(title);
+        _dataBase.collection("todos").document(title);
     Map<String, dynamic> todos = {
       "todoTitle": title ?? " ",
       "status": false,

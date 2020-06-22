@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:todoapps/Authentication/AuthService.dart';
@@ -8,32 +7,29 @@ import 'package:todoapps/Database/ToDo.dart';
 import 'package:todoapps/TextForm.dart';
 import 'package:todoapps/TodoList.dart';
 
+import 'Database/User.dart';
 import 'NextPage.dart';
 
 class Home extends StatefulWidget {
-  String uid;
+  User _user;
 
-  Home(String uid) {
-    this.uid = uid;
-  }
+  Home(this._user);
 
   @override
-  _HomeState createState() => _HomeState(this.uid);
+  _HomeState createState() => _HomeState(this._user);
 }
 
 class _HomeState extends State<Home> {
   final _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-  Firestore _firestore = Firestore();
-  final AuthService _authService = AuthService();
   TextEditingController todoTitleController = TextEditingController();
   TextEditingController todoDescriptionController = TextEditingController();
   DataBaseService _dataBaseService;
-  var uid;
+  User _user;
 
-  _HomeState(var uid) {
-    this.uid = uid;
-    _dataBaseService = DataBaseService.name(uid);
+  _HomeState(User user) {
+    this._user = user;
+    _dataBaseService = DataBaseService.name(this._user.uid);
   }
 
   @override
@@ -64,7 +60,8 @@ class _HomeState extends State<Home> {
           ),
           drawer: Drawer(
             child: DrawerHeader(
-              child: Text("test"),
+              child: Text(this._user.name),
+
             ),
           ),
           body: TodoList(),
@@ -103,7 +100,7 @@ class _HomeState extends State<Home> {
                   _dataBaseService.createTodos(
                     todoTitleController.text,
                     todoDescriptionController.text,
-                    uid,
+                    this._user.uid,
                   );
                   todoTitleController.text = "";
                   todoDescriptionController.text = "";
