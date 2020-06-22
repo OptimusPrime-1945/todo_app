@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/Database/ToDo.dart';
 
 class TodoList extends StatefulWidget {
@@ -8,6 +9,9 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
+  DataBaseService _dataBaseService = DataBaseService();
+  bool isStatus = false;
+
   @override
   Widget build(BuildContext context) {
     final todos = Provider.of<List<ToDo>>(context);
@@ -22,10 +26,7 @@ class _TodoListState extends State<TodoList> {
     );
   }
 
-  Widget _listItemBuilder(
-    BuildContext context,
-    ToDo todo,
-  ) {
+  Widget _listItemBuilder(BuildContext context, ToDo todo) {
     return Card(
       child: ListTile(
         title: Text(
@@ -47,6 +48,7 @@ class _TodoListState extends State<TodoList> {
           ],
         ),
         onTap: () => showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => _dialogBuilder(context, todo),
         ),
@@ -55,22 +57,62 @@ class _TodoListState extends State<TodoList> {
   }
 
   Widget _dialogBuilder(BuildContext context, ToDo todo) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: SimpleDialog(
-          contentPadding: EdgeInsets.zero,
-          elevation: 10.0,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Text(todo.todoTitle),
-                SizedBox(height: 10),
-                Text("Pending ${todo.status}")
-              ],
-            ),
-          ],
-        ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Builder(
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                title: Center(
+                    child: Text(
+                  "INFO",
+                  style: TextStyle(),
+                  textAlign: TextAlign.center,
+                )),
+                // sh,ape: Rect
+                contentPadding: EdgeInsets.zero,
+                //elevation: 10.0,
+                content: Wrap(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.title),
+                      title: Text(todo.todoTitle),
+                      // subtitle: Text(todo.description??"description"),
+                    ),
+                    SwitchListTile(
+                      title: ListTile(
+                          leading: Icon(Icons.title), title: Text("pending")),
+                      value: isStatus,
+                      onChanged: (value) {
+                        isStatus = value;
+                        setState(() {});
+                        _dataBaseService.createTodos(
+                          uid: todo.uid,
+                          title: todo.todoTitle,
+                          description: todo.description,
+                          status: isStatus,
+                        );
+                      },
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: RaisedButton(
+                        child: Text("Close"),
+                        color: Theme.of(context).accentColor,
+                        // icon: Icon(Icons.cancel),
+                        //  iconSize: 30,
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

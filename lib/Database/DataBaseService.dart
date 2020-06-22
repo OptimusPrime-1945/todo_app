@@ -47,13 +47,17 @@ class DataBaseService {
 //            email: event.data['email']));
 //  }
 
-  createTodos(String title, String descrption, String uid) {
+  createTodos(
+      {@required String title,
+      @required String description,
+      @required String uid,
+      @required bool status = false}) {
     DocumentReference documentReference =
         _dataBase.collection("todos").document(title);
     Map<String, dynamic> todos = {
       "todoTitle": title ?? " ",
-      "status": false,
-      "description": descrption ?? "",
+      "status": status,
+      "description": description ?? "",
       "uid": uid,
     };
     documentReference.setData(todos).whenComplete(() => print("Created"));

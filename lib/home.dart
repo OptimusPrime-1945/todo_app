@@ -98,9 +98,10 @@ class _HomeState extends State<Home> {
                 child: Text("Add"),
                 onPressed: () {
                   _dataBaseService.createTodos(
-                    todoTitleController.text,
-                    todoDescriptionController.text,
-                    this._user.uid,
+                    title: todoTitleController.text,
+                    description: todoDescriptionController.text,
+                    uid: this._user.uid,
+                    status: false,
                   );
                   todoTitleController.text = "";
                   todoDescriptionController.text = "";
