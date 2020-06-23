@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:todoapps/Database/User.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -21,12 +22,22 @@ class AuthService {
           await _auth.signInWithCredential(credential);
       final FirebaseUser user = authResult.user;
       return user;
-    } catch (e) {}
+    } catch (e) {
+      return null;
+    }
   }
 
   void signOutGoogle() async {
     await googleSignIn.signOut();
 
     print("User Sign Out");
+  }
+
+  User _userFromFireBaseUser(FirebaseUser user) {
+    return user != null ? User(uid: user.uid) : null;
+  }
+
+  Stream<User> get user {
+    return _auth.onAuthStateChanged.map(_userFromFireBaseUser);
   }
 }

@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapps/Database/ToDo.dart';
+import 'package:todoapps/Database/User.dart';
 
 class DataBaseService {
   final Firestore _dataBase = Firestore.instance;
   String uid;
 
-  DataBaseService.name(this.uid);
-
-  DataBaseService();
+  DataBaseService({this.uid});
 
   Future updateUserData(
       {@required String uid,
@@ -39,21 +38,26 @@ class DataBaseService {
     }).toList();
   }
 
-//  Stream<User> get user {
-//    return _dataBase.collection("users").document().snapshots().map((event) =>
-//        User(
-//            uid: event.data['uid'],
-//            name: event.data['name'],
-//            email: event.data['email']));
-//  }
+  Stream<User> get userData {
+    return _dataBase.document(this.uid).snapshots().map((event) =>
+        _userDataFromSnapShot(event));
+  }
 
-  createTodos(
-      {@required String title,
-      @required String description,
-      @required String uid,
-      @required bool status = false}) {
+  User _userDataFromSnapShot(DocumentSnapshot snapshot) {
+    return User(
+      uid: uid,
+      name: snapshot.data['name'],
+      email: snapshot.data['email'],
+    );
+  }
+
+
+  createTodos({@required String title,
+    @required String description,
+    @required String uid,
+    @required bool status = false}) {
     DocumentReference documentReference =
-        _dataBase.collection("todos").document(title);
+    _dataBase.collection("todos").document(title);
     Map<String, dynamic> todos = {
       "todoTitle": title ?? " ",
       "status": status,

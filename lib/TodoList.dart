@@ -88,12 +88,6 @@ class _TodoListState extends State<TodoList> {
                         onChanged: (value) {
                           isStatus = value;
                           setState(() {});
-                          _dataBaseService.createTodos(
-                            uid: todo.uid,
-                            title: todo.todoTitle,
-                            description: todo.description,
-                            status: isStatus,
-                          );
                         },
                       ),
                     ],
@@ -104,7 +98,15 @@ class _TodoListState extends State<TodoList> {
                   child: RaisedButton(
                     child: Text("Close"),
                     color: Theme.of(context).accentColor,
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _dataBaseService.createTodos(
+                        uid: todo.uid,
+                        title: todo.todoTitle,
+                        description: todo.description,
+                        status: isStatus,
+                      );
+                    },
                   ),
                 )
               ],

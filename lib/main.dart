@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapps/Authentication/AuthService.dart';
 import 'package:todoapps/Authentication/Wrapper.dart';
+import 'package:todoapps/Database/User.dart';
 
 void main() => runApp(TODO());
 
@@ -11,15 +14,18 @@ class TODO extends StatefulWidget {
 class _TODOState extends State<TODO> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Wrapper(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        accentColor: Colors.blueAccent,
-        buttonColor: Colors.blue,
-        buttonTheme: const ButtonThemeData(
-            textTheme: ButtonTextTheme.primary, buttonColor: Colors.blue),
+    return StreamProvider<User>.value(
+      value: AuthService().user,
+      child: MaterialApp(
+        home: Wrapper(),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.blue,
+          accentColor: Colors.blueAccent,
+          buttonColor: Colors.blue,
+          buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary, buttonColor: Colors.blue),
+        ),
       ),
     );
   }

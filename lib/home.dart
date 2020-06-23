@@ -7,16 +7,11 @@ import 'package:todoapps/Database/ToDo.dart';
 import 'package:todoapps/TextForm.dart';
 import 'package:todoapps/TodoList.dart';
 
-import 'Database/User.dart';
-import 'NextPage.dart';
-
 class Home extends StatefulWidget {
-  User _user;
 
-  Home(this._user);
 
   @override
-  _HomeState createState() => _HomeState(this._user);
+  _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
@@ -24,18 +19,12 @@ class _HomeState extends State<Home> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController todoTitleController = TextEditingController();
   TextEditingController todoDescriptionController = TextEditingController();
-  DataBaseService _dataBaseService;
-  User _user;
 
-  _HomeState(User user) {
-    this._user = user;
-    _dataBaseService = DataBaseService.name(this._user.uid);
-  }
 
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<ToDo>>.value(
-      value: _dataBaseService.todos,
+      value: DataBaseService().todos,
       child: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -58,12 +47,12 @@ class _HomeState extends State<Home> {
               )
             ],
           ),
-          drawer: Drawer(
-            child: DrawerHeader(
-              child: Text(this._user.name),
+          //drawer: Drawer(
+          //child: DrawerHeader(
+          // child: Text(this._user.name),
 
-            ),
-          ),
+          //),
+          //),
           body: TodoList(),
           floatingActionButton: new FloatingActionButton(
             onPressed: () => _floatingButtonCard(),
@@ -76,41 +65,40 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void routeToNextPage(String title) async {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (BuildContext Content) => new NextPage(title),
-    ));
-  }
 
   _floatingButtonCard() {
     return showDialog(
       context: context,
       builder: (context) => Form(
         key: _formKey,
-        child: SimpleDialog(
-          title: Center(child: Text("Add Todo")),
-          children: <Widget>[
-            textForm("Enter Todo", todoTitleController),
-            textForm("Enter Description", todoDescriptionController),
-            Align(
-              child: RaisedButton(
-                shape: StadiumBorder(),
-                child: Text("Add"),
-                onPressed: () {
-                  _dataBaseService.createTodos(
-                    title: todoTitleController.text,
-                    description: todoDescriptionController.text,
-                    uid: this._user.uid,
-                    status: false,
-                  );
-                  todoTitleController.text = "";
-                  todoDescriptionController.text = "";
-                  Navigator.pop(context);
-                },
-              ),
-            )
-          ],
-        ),
+        child: StreamBuilder<List<ToDo>>(
+            stream: DataBaseService().todos,
+            builder: (context, snapshot) {
+              return SimpleDialog(
+                title: Center(child: Text("Add Todo")),
+                children: <Widget>[
+                  textForm("Enter Todo", todoTitleController),
+                  textForm("Enter Description", todoDescriptionController),
+                  Align(
+                    child: RaisedButton(
+                      shape: StadiumBorder(),
+                      child: Text("Add"),
+                      onPressed: () {
+                        DataBaseService().createTodos(
+                          title: todoTitleController.text,
+                          description: todoDescriptionController.text,
+                          uid: DataBaseService().uid,
+                          status: false,
+                        );
+                        todoTitleController.text = "";
+                        todoDescriptionController.text = "";
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+                ],
+              );
+            }),
       ),
     );
   }
