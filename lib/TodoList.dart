@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/Database/ToDo.dart';
@@ -48,7 +49,6 @@ class _TodoListState extends State<TodoList> {
           ],
         ),
         onTap: () => showDialog(
-          barrierDismissible: false,
           context: context,
           builder: (context) => _dialogBuilder(context, todo),
         ),
@@ -57,62 +57,81 @@ class _TodoListState extends State<TodoList> {
   }
 
   Widget _dialogBuilder(BuildContext context, ToDo todo) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Builder(
-        builder: (context) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                title: Center(
-                    child: Text(
-                  "INFO",
-                  style: TextStyle(),
-                  textAlign: TextAlign.center,
-                )),
-                // sh,ape: Rect
-                contentPadding: EdgeInsets.zero,
-                //elevation: 10.0,
-                content: Wrap(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.title),
-                      title: Text(todo.todoTitle),
-                      // subtitle: Text(todo.description??"description"),
-                    ),
-                    SwitchListTile(
-                      title: ListTile(
-                          leading: Icon(Icons.title), title: Text("pending")),
-                      value: isStatus,
-                      onChanged: (value) {
-                        isStatus = value;
-                        setState(() {});
-                        _dataBaseService.createTodos(
-                          uid: todo.uid,
-                          title: todo.todoTitle,
-                          description: todo.description,
-                          status: isStatus,
-                        );
-                      },
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: RaisedButton(
-                        child: Text("Close"),
-                        color: Theme.of(context).accentColor,
-                        // icon: Icon(Icons.cancel),
-                        //  iconSize: 30,
-                        onPressed: () => Navigator.pop(context),
+    return Builder(
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return SimpleDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              title: Center(
+                  child: Text(
+                "INFO",
+                style: TextStyle(),
+                textAlign: TextAlign.center,
+              )),
+              // sh,ape: Rect
+              contentPadding: EdgeInsets.zero,
+              //elevation: 10.0,
+              children: <Widget>[
+                getListTile(todo.todoTitle),
+                getListTile(todo.description),
+                ListTile(
+                  leading: Icon(Icons.assistant_photo),
+                  title: Text("Pending"),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Switch(
+                        value: isStatus,
+                        onChanged: (value) {
+                          isStatus = value;
+                          setState(() {});
+                          _dataBaseService.createTodos(
+                            uid: todo.uid,
+                            title: todo.todoTitle,
+                            description: todo.description,
+                            status: isStatus,
+                          );
+                        },
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
-              );
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: RaisedButton(
+                    child: Text("Close"),
+                    color: Theme.of(context).accentColor,
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  ListTile getListTile(String title) {
+    return ListTile(
+      leading: Icon(Icons.title),
+      title: Text(title),
+      trailing: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.edit,
+            ),
+            onPressed: () {
+              debugPrint("edit");
             },
-          );
-        },
+          ),
+        ],
       ),
     );
   }
