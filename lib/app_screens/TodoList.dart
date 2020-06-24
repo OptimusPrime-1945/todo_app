@@ -44,12 +44,13 @@ class _TodoListState extends State<TodoList> {
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                print("Deleted");
+                _dataBaseService.delete(todo.todoTitle);
               },
             ),
           ],
         ),
         onTap: () => showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => _dialogBuilder(context, todo),
         ),
@@ -62,55 +63,65 @@ class _TodoListState extends State<TodoList> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return SimpleDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              title: Center(
+            return WillPopScope(
+              onWillPop: () async => false,
+              child: SimpleDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                ),
+                title: Center(
                   child: Text(
-                "INFO",
-                style: TextStyle(),
-                textAlign: TextAlign.center,
-              )),
-              // sh,ape: Rect
-              contentPadding: EdgeInsets.zero,
-              //elevation: 10.0,
-              children: <Widget>[
-                getListTile(todo.todoTitle),
-                getListTile(todo.description),
-                ListTile(
-                  leading: Icon(Icons.assistant_photo),
-                  title: Text("Pending"),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Switch(
-                        value: isStatus,
-                        onChanged: (value) {
-                          isStatus = value;
-                          setState(() {});
-                        },
-                      ),
-                    ],
+                    "INFO",
+                    style: TextStyle(),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
-                    child: Text("Close"),
-                    color: Theme.of(context).accentColor,
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _dataBaseService.createTodos(
-                        uid: todo.uid,
-                        title: todo.todoTitle,
-                        description: todo.description,
-                        status: isStatus,
-                      );
-                    },
+                contentPadding: EdgeInsets.zero,
+                //elevation: 10.0,
+                children: <Widget>[
+                  getListTile(todo.todoTitle),
+                  SizedBox(
+                    height: 10.0,
                   ),
-                )
-              ],
+                  getListTile(todo.description),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.assistant_photo),
+                    title: Text("Pending"),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Switch(
+                          value: isStatus,
+                          onChanged: (value) {
+                            isStatus = value;
+                            setState(() {});
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: RaisedButton(
+                      child: Text("Close"),
+                      color: Theme.of(context).accentColor,
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _dataBaseService.createTodos(
+                          uid: todo.uid,
+                          title: todo.todoTitle,
+                          description: todo.description,
+                          status: isStatus,
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
             );
           },
         );

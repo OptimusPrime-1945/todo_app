@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-TextFormField textForm(String label, TextEditingController controller) {
+TextFormField textForm({@required String label,@required TextEditingController controller}) {
   return TextFormField(
     controller: controller,
     onChanged: (val) {},

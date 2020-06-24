@@ -39,8 +39,10 @@ class DataBaseService {
   }
 
   Stream<User> get userData {
-    return _dataBase.document(this.uid).snapshots().map((event) =>
-        _userDataFromSnapShot(event));
+    return _dataBase
+        .document(this.uid)
+        .snapshots()
+        .map((event) => _userDataFromSnapShot(event));
   }
 
   User _userDataFromSnapShot(DocumentSnapshot snapshot) {
@@ -51,13 +53,13 @@ class DataBaseService {
     );
   }
 
-
-  createTodos({@required String title,
-    @required String description,
-    @required String uid,
-    @required bool status = false}) {
+  createTodos(
+      {@required String title,
+      @required String description,
+      @required String uid,
+      @required bool status}) {
     DocumentReference documentReference =
-    _dataBase.collection("todos").document(title);
+        _dataBase.collection("todos").document(title);
     Map<String, dynamic> todos = {
       "todoTitle": title ?? " ",
       "status": status,
@@ -65,5 +67,10 @@ class DataBaseService {
       "uid": uid,
     };
     documentReference.setData(todos).whenComplete(() => print("Created"));
+  }
+
+  void delete(String title) {
+    DocumentReference documentReference =_dataBase.collection("todos").document(title);
+    documentReference.delete().whenComplete(() => print("Deleted"));
   }
 }
