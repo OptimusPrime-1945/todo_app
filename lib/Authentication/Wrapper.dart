@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapps/Authentication/Authenticate.dart';
 import 'package:todoapps/Database/User.dart';
-import 'package:todoapps/home.dart';
+import 'package:todoapps/app_screens/home.dart';
 
 class Wrapper extends StatefulWidget {
   @override
@@ -14,7 +14,10 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
-    if (user == null) return Authenticate();
-    return Home();
+    if (user == null)
+      return Authenticate();
+    else {
+      return Home();
+    }
   }
 }

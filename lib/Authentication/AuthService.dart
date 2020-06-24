@@ -27,10 +27,14 @@ class AuthService {
     }
   }
 
-  void signOutGoogle() async {
-    await googleSignIn.signOut();
-
-    print("User Sign Out");
+  Future signOutGoogle() async {
+    try {
+      await googleSignIn.signOut();
+      return await _auth.signOut();
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   User _userFromFireBaseUser(FirebaseUser user) {

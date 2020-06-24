@@ -10,7 +10,7 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  DataBaseService _dataBaseService = DataBaseService();
+  DataBaseService _dataBaseService;
   bool isStatus = false;
 
   @override
@@ -28,6 +28,7 @@ class _TodoListState extends State<TodoList> {
   }
 
   Widget _listItemBuilder(BuildContext context, ToDo todo) {
+    _dataBaseService = DataBaseService(uid: todo.uid);
     return Card(
       child: ListTile(
         title: Text(
