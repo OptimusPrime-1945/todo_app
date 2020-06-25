@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapps/Authentication/AuthService.dart';
 import 'package:todoapps/Authentication/Loading.dart';
+import 'package:todoapps/Database/DataBaseService.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -47,6 +48,8 @@ class _SignInState extends State<SignIn> {
           loading = true;
         });
         FirebaseUser user = await _authService.signInWithGoogle();
+        DataBaseService(uid: user.uid).updateUserData(
+            uid: user.uid, name: user.displayName, email: user.email);
         if (user == null) loading = false;
       },
       shape: RoundedRectangleBorder(

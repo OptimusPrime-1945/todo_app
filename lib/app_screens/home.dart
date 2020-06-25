@@ -1,13 +1,13 @@
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapps/Authentication/AuthService.dart';
 import 'package:todoapps/Authentication/Loading.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
-import 'package:todoapps/Database/ToDo.dart';
-import 'package:todoapps/Database/User.dart';
+import 'package:todoapps/Models/ToDo.dart';
+import 'package:todoapps/Models/User.dart';
 import 'package:todoapps/app_screens/HomePageDrawer.dart';
-import 'package:todoapps/app_screens/TextForm.dart';
 import 'package:todoapps/app_screens/TodoList.dart';
 
 class Home extends StatefulWidget {
@@ -17,9 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _auth = AuthService();
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController todoTitleController = TextEditingController();
-  TextEditingController todoDescriptionController = TextEditingController();
+  final _fbsKey = GlobalKey<FormBuilderState>();
   var user;
 
   bool loading = false;
@@ -71,61 +69,69 @@ class _HomeState extends State<Home> {
 
   _floatingButtonCard() {
     return showDialog(
-      barrierDismissible: false,
       context: context,
-      builder: (context) => Form(
-        key: _formKey,
-        child: StreamBuilder<List<ToDo>>(
-          stream: DataBaseService(uid: this.user.uid).todos,
-          builder: (context, snapshot) {
-            return WillPopScope(
-              onWillPop: () async => false,
-              child: SimpleDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                title: Center(
-                  child: Text("Add Todo"),
-                ),
-                contentPadding: EdgeInsets.all(10.0),
-                children: <Widget>[
-                  textForm(
-                    label: "Enter Todo",
-                    controller: todoTitleController,
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  textForm(
-                    label: "Enter Description",
-                    controller: todoDescriptionController,
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Align(
-                    child: RaisedButton(
-                      shape: StadiumBorder(),
-                      child: Text("Add"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        DataBaseService(uid: this.user.uid).createTodos(
-                          title: todoTitleController.text,
-                          description: todoDescriptionController.text,
-                          uid: this.user.uid,
-                          status: false,
-                        );
-                        todoTitleController.text = "";
-                        todoDescriptionController.text = "";
-                        Navigator.pop(context);
-                      },
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
+      builder: (context) => SimpleDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
+        title: Center(
+          child: Text("Add Todo"),
+        ),
+        contentPadding: EdgeInsets.all(10.0),
+        children: <Widget>[
+          FormBuilder(
+            key: _fbsKey,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FormBuilderTextField(
+                    attribute: 'todoTitle',
+                    validators: [
+                      FormBuilderValidators.required(),
+                      FormBuilderValidators.maxLength(10,
+                          errorText: "Limit Exceeded (10)")
+                    ],
+                    decoration: InputDecoration(
+                      labelText: "Enter Todo",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FormBuilderTextField(
+                    attribute: 'description',
+                    validators: [FormBuilderValidators.required()],
+                    decoration: InputDecoration(
+                      labelText: "Description",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            child: RaisedButton(
+              shape: StadiumBorder(),
+              child: Text("Add"),
+              onPressed: () {
+                if (_fbsKey.currentState.saveAndValidate()) {
+                  print(_fbsKey.currentState.value);
+                  ToDo entry = ToDo.fromJson(_fbsKey.currentState.value);
+                  print(entry);
+                  Navigator.pop(context);
+                  DataBaseService(uid: this.user.uid).addTodo(entry);
+                }
+              },
+            ),
+          )
+        ],
       ),
     );
   }

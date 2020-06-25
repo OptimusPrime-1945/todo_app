@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapps/Database/ToDo.dart';
-import 'package:todoapps/Database/User.dart';
+import 'package:todoapps/Models/ToDo.dart';
+import 'package:todoapps/Models/User.dart';
 
 class DataBaseService {
   final Firestore _dataBase = Firestore.instance;
@@ -29,12 +29,7 @@ class DataBaseService {
 
   List<ToDo> _todosFromSnapShot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
-      return ToDo(
-        todoTitle: doc.data['todoTitle'] ?? "No Titile",
-        description: doc.data['description'] ?? "No description Mentioned",
-        status: doc.data['status'] ?? false,
-        uid: doc.data['uid'] ?? "",
-      );
+      return ToDo.fromJson(doc.data);
     }).toList();
   }
 
@@ -46,31 +41,48 @@ class DataBaseService {
   }
 
   User _userDataFromSnapShot(DocumentSnapshot snapshot) {
-    return User(
-      uid: uid,
-      name: snapshot.data['name'],
-      email: snapshot.data['email'],
-    );
+    return User.fromJson(snapshot.data);
   }
 
-  createTodos(
-      {@required String title,
-      @required String description,
-      @required String uid,
-      @required bool status}) {
-    DocumentReference documentReference =
-        _dataBase.collection("todos").document(title);
-    Map<String, dynamic> todos = {
-      "todoTitle": title ?? " ",
-      "status": status,
-      "description": description ?? "",
-      "uid": uid,
-    };
-    documentReference.setData(todos).whenComplete(() => print("Created"));
+  createTodos({@required String title,
+    @required String description,
+    @required String uid,
+    @required bool status}) {
+    CollectionReference documentReference = _dataBase.collection("todos");
+    String docId = _dataBase
+        .collection("todos")
+        .document()
+        .documentID;
+    ToDo toDo = ToDo(
+        todoTitle: title,
+        description: description,
+        uid: uid,
+        status: status,
+        docId: docId);
+
+    documentReference
+        .document(docId)
+        .setData(toDo.toJson())
+        .whenComplete(() => print("Created"));
+  }
+
+  addTodo(ToDo toDo) {
+    CollectionReference documentReference = _dataBase.collection("todos");
+    String docId = _dataBase
+        .collection("todos")
+        .document()
+        .documentID;
+    toDo = toDo.copyWith(uid: uid, status: false, docId: docId);
+
+    documentReference
+        .document(docId)
+        .setData(toDo.toJson())
+        .whenComplete(() => print("Created"));
   }
 
   void delete(String title) {
-    DocumentReference documentReference =_dataBase.collection("todos").document(title);
+    DocumentReference documentReference =
+    _dataBase.collection("todos").document(title);
     documentReference.delete().whenComplete(() => print("Deleted"));
   }
 }

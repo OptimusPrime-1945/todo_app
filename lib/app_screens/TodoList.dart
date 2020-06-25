@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
-import 'package:todoapps/Database/ToDo.dart';
+import 'package:todoapps/Models/ToDo.dart';
 
 class TodoList extends StatefulWidget {
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapps/Authentication/Authenticate.dart';
-import 'package:todoapps/Database/User.dart';
+import 'package:todoapps/Models/User.dart';
 import 'package:todoapps/app_screens/home.dart';
 
 class Wrapper extends StatefulWidget {
