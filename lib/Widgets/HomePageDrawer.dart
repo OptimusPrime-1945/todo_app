@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapps/Authentication/AuthService.dart';
 import 'package:todoapps/Models/User.dart';
 
 class HomePageDrawer extends StatefulWidget {
@@ -8,6 +9,8 @@ class HomePageDrawer extends StatefulWidget {
 }
 
 class _HomePageDrawerState extends State<HomePageDrawer> {
+  final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     dynamic user = Provider.of<User>(context);
@@ -21,19 +24,16 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
             accountEmail: Text(user.email),
             currentAccountPicture: new GestureDetector(
               child: new CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://static3.srcdn.com/wordpress/wp-content/uploads/2017/02/transformers-last-knight-optimus-prime.jpg"),
               ),
             ),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage(
-                  "https://static3.srcdn.com/wordpress/wp-content/uploads/2017/02/transformers-last-knight-optimus-prime.jpg",
-                ),
-              ),
-            ),
-          )
+          ),
+          FlatButton.icon(
+            label: Text("Logout"),
+            icon: Icon(Icons.power_settings_new),
+            onPressed: () async {
+              await _auth.signOut();
+            },
+          ),
         ],
       ),
     ));

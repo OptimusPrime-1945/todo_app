@@ -44,15 +44,13 @@ class DataBaseService {
     return User.fromJson(snapshot.data);
   }
 
-  createTodos({@required String title,
-    @required String description,
-    @required String uid,
-    @required bool status}) {
+  createTodos(
+      {@required String title,
+      @required String description,
+      @required String uid,
+      @required bool status}) {
     CollectionReference documentReference = _dataBase.collection("todos");
-    String docId = _dataBase
-        .collection("todos")
-        .document()
-        .documentID;
+    String docId = _dataBase.collection("todos").document().documentID;
     ToDo toDo = ToDo(
         todoTitle: title,
         description: description,
@@ -67,22 +65,27 @@ class DataBaseService {
   }
 
   addTodo(ToDo toDo) {
-    CollectionReference documentReference = _dataBase.collection("todos");
-    String docId = _dataBase
-        .collection("todos")
-        .document()
-        .documentID;
-    toDo = toDo.copyWith(uid: uid, status: false, docId: docId);
-
-    documentReference
-        .document(docId)
+    CollectionReference collectionReference = _dataBase.collection("todos");
+    String docId;
+    if (toDo.docId == null) {
+      docId = _dataBase.collection("todos").document().documentID;
+      toDo = toDo.copyWith(uid: uid, status: toDo.status, docId: docId);
+    }
+    print(toDo);
+    collectionReference
+        .document(toDo.docId)
         .setData(toDo.toJson())
         .whenComplete(() => print("Created"));
   }
 
+  updateTodo(ToDo toDo) {
+    CollectionReference collectionReference = _dataBase.collection("todos");
+    collectionReference.document(toDo.docId).setData(toDo.toJson());
+  }
+
   void delete(String title) {
     DocumentReference documentReference =
-    _dataBase.collection("todos").document(title);
+        _dataBase.collection("todos").document(title);
     documentReference.delete().whenComplete(() => print("Deleted"));
   }
 }

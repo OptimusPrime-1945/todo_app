@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/Models/ToDo.dart';
+import 'package:todoapps/Models/User.dart';
+import 'package:todoapps/Widgets/SimpleDialogBox.dart';
 
 class TodoList extends StatefulWidget {
   @override
@@ -16,15 +18,21 @@ class _TodoListState extends State<TodoList> {
   @override
   Widget build(BuildContext context) {
     final todos = Provider.of<List<ToDo>>(context);
-    return ListView.builder(
-      itemCount: todos.length,
-      itemBuilder: (context, index) {
-        if (todos.length == 0)
-          return Text("Ya No TODOS Left");
-        else
+    if (todos != null)
+      return ListView.builder(
+        itemCount: todos.length,
+        itemBuilder: (context, index) {
           return _listItemBuilder(context, todos[index]);
-      },
-    );
+        },
+      );
+    else
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          CircularProgressIndicator(),
+          Text("Loading Please wait"),
+        ],
+      );
   }
 
   Widget _listItemBuilder(BuildContext context, ToDo todo) {
@@ -42,9 +50,18 @@ class _TodoListState extends State<TodoList> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialogBox(user: User(uid: todo.uid),toDo :todo,),
+                );
+              },
+            ),
+            IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                _dataBaseService.delete(todo.todoTitle);
+                _dataBaseService.delete(todo.docId);
               },
             ),
           ],
@@ -111,11 +128,14 @@ class _TodoListState extends State<TodoList> {
                       color: Theme.of(context).accentColor,
                       onPressed: () {
                         Navigator.pop(context);
-                        _dataBaseService.createTodos(
-                          uid: todo.uid,
-                          title: todo.todoTitle,
-                          description: todo.description,
-                          status: isStatus,
+                        _dataBaseService.updateTodo(
+                          ToDo(
+                            docId: todo.docId,
+                            uid: todo.uid,
+                            todoTitle: todo.todoTitle,
+                            description: todo.description,
+                            status: isStatus,
+                          ),
                         );
                       },
                     ),
@@ -136,16 +156,6 @@ class _TodoListState extends State<TodoList> {
       trailing: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.edit,
-            ),
-            onPressed: () {
-              debugPrint("edit");
-            },
-          ),
-        ],
       ),
     );
   }
