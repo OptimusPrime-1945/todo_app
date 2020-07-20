@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'ToDo.freezed.dart';
-
 part 'ToDo.g.dart';
 
 @freezed
@@ -13,6 +12,7 @@ abstract class ToDo with _$ToDo {
     bool status,
     String description,
     String uid,
+    DateTime dateTime,
   }) = _ToDo;
 
   factory ToDo.fromJson(Map<String, dynamic> json) => _$ToDoFromJson(json);

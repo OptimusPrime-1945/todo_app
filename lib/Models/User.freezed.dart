@@ -15,11 +15,13 @@ User _$UserFromJson(Map<String, dynamic> json) {
 class _$UserTearOff {
   const _$UserTearOff();
 
-  _User call({@required String uid, String name, String email}) {
+  _User call(
+      {@required String uid, String name, String email, String imageURL}) {
     return _User(
       uid: uid,
       name: name,
       email: email,
+      imageURL: imageURL,
     );
   }
 }
@@ -30,7 +32,10 @@ const $User = _$UserTearOff();
 mixin _$User {
   String get uid;
   String get name;
+
   String get email;
+
+  String get imageURL;
 
   Map<String, dynamic> toJson();
   $UserCopyWith<User> get copyWith;
@@ -39,7 +44,8 @@ mixin _$User {
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res>;
-  $Res call({String uid, String name, String email});
+
+  $Res call({String uid, String name, String email, String imageURL});
 }
 
 class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
@@ -54,11 +60,13 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
     Object uid = freezed,
     Object name = freezed,
     Object email = freezed,
+    Object imageURL = freezed,
   }) {
     return _then(_value.copyWith(
       uid: uid == freezed ? _value.uid : uid as String,
       name: name == freezed ? _value.name : name as String,
       email: email == freezed ? _value.email : email as String,
+      imageURL: imageURL == freezed ? _value.imageURL : imageURL as String,
     ));
   }
 }
@@ -66,8 +74,9 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
 abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) then) =
       __$UserCopyWithImpl<$Res>;
+
   @override
-  $Res call({String uid, String name, String email});
+  $Res call({String uid, String name, String email, String imageURL});
 }
 
 class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
@@ -83,18 +92,20 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
     Object uid = freezed,
     Object name = freezed,
     Object email = freezed,
+    Object imageURL = freezed,
   }) {
     return _then(_User(
       uid: uid == freezed ? _value.uid : uid as String,
       name: name == freezed ? _value.name : name as String,
       email: email == freezed ? _value.email : email as String,
+      imageURL: imageURL == freezed ? _value.imageURL : imageURL as String,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_User with DiagnosticableTreeMixin implements _User {
-  const _$_User({@required this.uid, this.name, this.email})
+  const _$_User({@required this.uid, this.name, this.email, this.imageURL})
       : assert(uid != null);
 
   factory _$_User.fromJson(Map<String, dynamic> json) =>
@@ -106,10 +117,12 @@ class _$_User with DiagnosticableTreeMixin implements _User {
   final String name;
   @override
   final String email;
+  @override
+  final String imageURL;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'User(uid: $uid, name: $name, email: $email)';
+    return 'User(uid: $uid, name: $name, email: $email, imageURL: $imageURL)';
   }
 
   @override
@@ -119,7 +132,8 @@ class _$_User with DiagnosticableTreeMixin implements _User {
       ..add(DiagnosticsProperty('type', 'User'))
       ..add(DiagnosticsProperty('uid', uid))
       ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('email', email));
+      ..add(DiagnosticsProperty('email', email))
+      ..add(DiagnosticsProperty('imageURL', imageURL));
   }
 
   @override
@@ -131,7 +145,10 @@ class _$_User with DiagnosticableTreeMixin implements _User {
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)));
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.imageURL, imageURL) ||
+                const DeepCollectionEquality()
+                    .equals(other.imageURL, imageURL)));
   }
 
   @override
@@ -139,7 +156,8 @@ class _$_User with DiagnosticableTreeMixin implements _User {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(uid) ^
       const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(email);
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(imageURL);
 
   @override
   _$UserCopyWith<_User> get copyWith =>
@@ -152,17 +170,25 @@ class _$_User with DiagnosticableTreeMixin implements _User {
 }
 
 abstract class _User implements User {
-  const factory _User({@required String uid, String name, String email}) =
-      _$_User;
+  const factory _User({@required String uid,
+    String name,
+    String email,
+    String imageURL}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
   @override
   String get uid;
+
   @override
   String get name;
+
   @override
   String get email;
+
+  @override
+  String get imageURL;
+
   @override
   _$UserCopyWith<_User> get copyWith;
 }

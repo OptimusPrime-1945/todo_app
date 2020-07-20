@@ -18,11 +18,7 @@ class _WrapperState extends State<Wrapper> {
     if (user == null)
       return Authenticate();
     else {
-      DataBaseService(uid: user.uid).updateUserData(
-        uid: user.uid,
-        name: user.name,
-        email: user.email,
-      );
+      DataBaseService(uid: user.uid).updateUserData(user: user);
       return Home();
     }
   }

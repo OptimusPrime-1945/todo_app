@@ -24,6 +24,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
             accountEmail: Text(user.email),
             currentAccountPicture: new GestureDetector(
               child: new CircleAvatar(
+                backgroundImage: NetworkImage(user.imageURL),
               ),
             ),
           ),

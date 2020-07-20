@@ -13,13 +13,18 @@ _$_ToDo _$_$_ToDoFromJson(Map<String, dynamic> json) {
     status: json['status'] as bool,
     description: json['description'] as String,
     uid: json['uid'] as String,
+    dateTime: json['dateTime'] == null
+        ? null
+        : DateTime.parse(json['dateTime'] as String),
   );
 }
 
-Map<String, dynamic> _$_$_ToDoToJson(_$_ToDo instance) => <String, dynamic>{
+Map<String, dynamic> _$_$_ToDoToJson(_$_ToDo instance) =>
+    <String, dynamic>{
       'docId': instance.docId,
       'todoTitle': instance.todoTitle,
       'status': instance.status,
       'description': instance.description,
       'uid': instance.uid,
+      'dateTime': instance.dateTime?.toIso8601String(),
     };

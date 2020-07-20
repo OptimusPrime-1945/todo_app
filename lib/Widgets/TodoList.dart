@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/Models/ToDo.dart';
@@ -7,13 +8,20 @@ import 'package:todoapps/Models/User.dart';
 import 'package:todoapps/Widgets/SimpleDialogBox.dart';
 
 class TodoList extends StatefulWidget {
+  bool status;
+
+  TodoList({@required this.status});
+
   @override
-  _TodoListState createState() => _TodoListState();
+  _TodoListState createState() => _TodoListState(status: this.status);
 }
 
 class _TodoListState extends State<TodoList> {
   DataBaseService _dataBaseService;
-  bool isStatus = false;
+  bool isStatus;
+  bool status;
+
+  _TodoListState({@required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -37,45 +45,51 @@ class _TodoListState extends State<TodoList> {
 
   Widget _listItemBuilder(BuildContext context, ToDo todo) {
     _dataBaseService = DataBaseService(uid: todo.uid);
-    return Card(
-      child: ListTile(
-        title: Text(
-          todo.todoTitle,
+    if (this.status == todo.status) {
+      return Card(
+        child: ListTile(
+          title: Text(
+            todo.todoTitle,
+          ),
+          leading: CircleAvatar(
+            child: Icon(Icons.update),
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => SimpleDialogBox(
+                      user: User(uid: todo.uid),
+                      toDo: todo,
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  _dataBaseService.delete(todo.docId);
+                },
+              ),
+            ],
+          ),
+          onTap: () => showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => _dialogBuilder(context, todo),
+          ),
         ),
-        leading: CircleAvatar(
-          child: Icon(Icons.update),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => SimpleDialogBox(user: User(uid: todo.uid),toDo :todo,),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                _dataBaseService.delete(todo.docId);
-              },
-            ),
-          ],
-        ),
-        onTap: () => showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => _dialogBuilder(context, todo),
-        ),
-      ),
-    );
+      );
+    }
   }
 
   Widget _dialogBuilder(BuildContext context, ToDo todo) {
+    this.isStatus = todo.status;
     return Builder(
       builder: (context) {
         return StatefulBuilder(
@@ -83,6 +97,7 @@ class _TodoListState extends State<TodoList> {
             return WillPopScope(
               onWillPop: () async => false,
               child: SimpleDialog(
+                contentPadding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
@@ -93,14 +108,12 @@ class _TodoListState extends State<TodoList> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                contentPadding: EdgeInsets.zero,
-                //elevation: 10.0,
                 children: <Widget>[
-                  getListTile(todo.todoTitle),
+                  getListTile(todo.todoTitle, Icons.title),
                   SizedBox(
                     height: 10.0,
                   ),
-                  getListTile(todo.description),
+                  getListTile(todo.description, Icons.description),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -121,22 +134,22 @@ class _TodoListState extends State<TodoList> {
                       ],
                     ),
                   ),
+                  getListTile(DateFormat.yMd().add_jm().format(todo.dateTime),
+                      Icons.timelapse),
+                  SizedBox(
+                    height: 10.0,
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: RaisedButton(
                       child: Text("Close"),
-                      color: Theme.of(context).accentColor,
+                      color: Theme
+                          .of(context)
+                          .accentColor,
                       onPressed: () {
                         Navigator.pop(context);
-                        _dataBaseService.updateTodo(
-                          ToDo(
-                            docId: todo.docId,
-                            uid: todo.uid,
-                            todoTitle: todo.todoTitle,
-                            description: todo.description,
-                            status: isStatus,
-                          ),
-                        );
+                        _dataBaseService
+                            .updateTodo(todo.copyWith(status: this.isStatus));
                       },
                     ),
                   )
@@ -149,9 +162,9 @@ class _TodoListState extends State<TodoList> {
     );
   }
 
-  ListTile getListTile(String title) {
+  ListTile getListTile(String title, IconData icon) {
     return ListTile(
-      leading: Icon(Icons.title),
+      leading: Icon(icon),
       title: Text(title),
       trailing: Row(
         mainAxisAlignment: MainAxisAlignment.end,

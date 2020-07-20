@@ -20,13 +20,15 @@ class _$ToDoTearOff {
       String todoTitle,
       bool status,
       String description,
-      String uid}) {
+      String uid,
+      DateTime dateTime}) {
     return _ToDo(
       docId: docId,
       todoTitle: todoTitle,
       status: status,
       description: description,
       uid: uid,
+      dateTime: dateTime,
     );
   }
 }
@@ -39,7 +41,10 @@ mixin _$ToDo {
   String get todoTitle;
   bool get status;
   String get description;
+
   String get uid;
+
+  DateTime get dateTime;
 
   Map<String, dynamic> toJson();
   $ToDoCopyWith<ToDo> get copyWith;
@@ -48,12 +53,13 @@ mixin _$ToDo {
 abstract class $ToDoCopyWith<$Res> {
   factory $ToDoCopyWith(ToDo value, $Res Function(ToDo) then) =
       _$ToDoCopyWithImpl<$Res>;
-  $Res call(
-      {String docId,
-      String todoTitle,
-      bool status,
-      String description,
-      String uid});
+
+  $Res call({String docId,
+    String todoTitle,
+    bool status,
+    String description,
+    String uid,
+    DateTime dateTime});
 }
 
 class _$ToDoCopyWithImpl<$Res> implements $ToDoCopyWith<$Res> {
@@ -70,14 +76,16 @@ class _$ToDoCopyWithImpl<$Res> implements $ToDoCopyWith<$Res> {
     Object status = freezed,
     Object description = freezed,
     Object uid = freezed,
+    Object dateTime = freezed,
   }) {
     return _then(_value.copyWith(
       docId: docId == freezed ? _value.docId : docId as String,
       todoTitle: todoTitle == freezed ? _value.todoTitle : todoTitle as String,
       status: status == freezed ? _value.status : status as bool,
       description:
-          description == freezed ? _value.description : description as String,
+      description == freezed ? _value.description : description as String,
       uid: uid == freezed ? _value.uid : uid as String,
+      dateTime: dateTime == freezed ? _value.dateTime : dateTime as DateTime,
     ));
   }
 }
@@ -85,13 +93,14 @@ class _$ToDoCopyWithImpl<$Res> implements $ToDoCopyWith<$Res> {
 abstract class _$ToDoCopyWith<$Res> implements $ToDoCopyWith<$Res> {
   factory _$ToDoCopyWith(_ToDo value, $Res Function(_ToDo) then) =
       __$ToDoCopyWithImpl<$Res>;
+
   @override
-  $Res call(
-      {String docId,
-      String todoTitle,
-      bool status,
-      String description,
-      String uid});
+  $Res call({String docId,
+    String todoTitle,
+    bool status,
+    String description,
+    String uid,
+    DateTime dateTime});
 }
 
 class __$ToDoCopyWithImpl<$Res> extends _$ToDoCopyWithImpl<$Res>
@@ -109,22 +118,28 @@ class __$ToDoCopyWithImpl<$Res> extends _$ToDoCopyWithImpl<$Res>
     Object status = freezed,
     Object description = freezed,
     Object uid = freezed,
+    Object dateTime = freezed,
   }) {
     return _then(_ToDo(
       docId: docId == freezed ? _value.docId : docId as String,
       todoTitle: todoTitle == freezed ? _value.todoTitle : todoTitle as String,
       status: status == freezed ? _value.status : status as bool,
       description:
-          description == freezed ? _value.description : description as String,
+      description == freezed ? _value.description : description as String,
       uid: uid == freezed ? _value.uid : uid as String,
+      dateTime: dateTime == freezed ? _value.dateTime : dateTime as DateTime,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_ToDo with DiagnosticableTreeMixin implements _ToDo {
-  const _$_ToDo(
-      {this.docId, this.todoTitle, this.status, this.description, this.uid});
+  const _$_ToDo({this.docId,
+    this.todoTitle,
+    this.status,
+    this.description,
+    this.uid,
+    this.dateTime});
 
   factory _$_ToDo.fromJson(Map<String, dynamic> json) =>
       _$_$_ToDoFromJson(json);
@@ -139,22 +154,24 @@ class _$_ToDo with DiagnosticableTreeMixin implements _ToDo {
   final String description;
   @override
   final String uid;
+  @override
+  final DateTime dateTime;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ToDo(docId: $docId, todoTitle: $todoTitle, status: $status, description: $description, uid: $uid)';
+    return 'ToDo(docId: $docId, todoTitle: $todoTitle, status: $status, description: $description, uid: $uid, dateTime: $dateTime)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'ToDo'))
-      ..add(DiagnosticsProperty('docId', docId))
-      ..add(DiagnosticsProperty('todoTitle', todoTitle))
-      ..add(DiagnosticsProperty('status', status))
-      ..add(DiagnosticsProperty('description', description))
-      ..add(DiagnosticsProperty('uid', uid));
+    properties..add(DiagnosticsProperty('type', 'ToDo'))..add(
+        DiagnosticsProperty('docId', docId))..add(
+        DiagnosticsProperty('todoTitle', todoTitle))..add(
+        DiagnosticsProperty('status', status))..add(
+        DiagnosticsProperty('description', description))..add(
+        DiagnosticsProperty('uid', uid))..add(
+        DiagnosticsProperty('dateTime', dateTime));
   }
 
   @override
@@ -172,7 +189,10 @@ class _$_ToDo with DiagnosticableTreeMixin implements _ToDo {
                 const DeepCollectionEquality()
                     .equals(other.description, description)) &&
             (identical(other.uid, uid) ||
-                const DeepCollectionEquality().equals(other.uid, uid)));
+                const DeepCollectionEquality().equals(other.uid, uid)) &&
+            (identical(other.dateTime, dateTime) ||
+                const DeepCollectionEquality()
+                    .equals(other.dateTime, dateTime)));
   }
 
   @override
@@ -182,7 +202,8 @@ class _$_ToDo with DiagnosticableTreeMixin implements _ToDo {
       const DeepCollectionEquality().hash(todoTitle) ^
       const DeepCollectionEquality().hash(status) ^
       const DeepCollectionEquality().hash(description) ^
-      const DeepCollectionEquality().hash(uid);
+      const DeepCollectionEquality().hash(uid) ^
+      const DeepCollectionEquality().hash(dateTime);
 
   @override
   _$ToDoCopyWith<_ToDo> get copyWith =>
@@ -195,25 +216,33 @@ class _$_ToDo with DiagnosticableTreeMixin implements _ToDo {
 }
 
 abstract class _ToDo implements ToDo {
-  const factory _ToDo(
-      {String docId,
-      String todoTitle,
-      bool status,
-      String description,
-      String uid}) = _$_ToDo;
+  const factory _ToDo({String docId,
+    String todoTitle,
+    bool status,
+    String description,
+    String uid,
+    DateTime dateTime}) = _$_ToDo;
 
   factory _ToDo.fromJson(Map<String, dynamic> json) = _$_ToDo.fromJson;
 
   @override
   String get docId;
+
   @override
   String get todoTitle;
+
   @override
   bool get status;
+
   @override
   String get description;
+
   @override
   String get uid;
+
+  @override
+  DateTime get dateTime;
+
   @override
   _$ToDoCopyWith<_ToDo> get copyWith;
 }

@@ -41,11 +41,14 @@ class AuthService with ChangeNotifier {
     return _auth.onAuthStateChanged.map(_userFromFireBaseUser);
   }
 
-  User _userFromFireBaseUser(FirebaseUser user) {
-    return user != null
-        ? User(uid: user.uid, email: user.email, name: user.displayName)
-        : null;
-  }
+  User _userFromFireBaseUser(FirebaseUser user) => user != null
+      ? User(
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName,
+          imageURL: user.photoUrl,
+        )
+      : null;
 
   Stream<User> get user {
     return _auth.onAuthStateChanged.map(_userFromFireBaseUser);

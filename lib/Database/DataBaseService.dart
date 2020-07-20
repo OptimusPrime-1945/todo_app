@@ -9,14 +9,13 @@ class DataBaseService {
 
   DataBaseService({this.uid});
 
-  Future updateUserData(
-      {@required String uid,
-      @required String name,
-      @required String email}) async {
-    return await _dataBase
-        .collection("users")
-        .document(uid)
-        .setData({'name': name, 'email': email, 'uid': uid});
+  Future updateUserData({@required User user}) async {
+    return await _dataBase.collection("users").document(uid).setData({
+      'name': user.name,
+      'email': user.email,
+      'uid': user.uid,
+      'imageURL': user.imageURL
+    });
   }
 
   Stream<List<ToDo>> get todos {
@@ -52,11 +51,13 @@ class DataBaseService {
     CollectionReference documentReference = _dataBase.collection("todos");
     String docId = _dataBase.collection("todos").document().documentID;
     ToDo toDo = ToDo(
-        todoTitle: title,
-        description: description,
-        uid: uid,
-        status: status,
-        docId: docId);
+      todoTitle: title,
+      description: description,
+      uid: uid,
+      status: status,
+      docId: docId,
+      dateTime: DateTime.now(),
+    );
 
     documentReference
         .document(docId)
@@ -68,8 +69,16 @@ class DataBaseService {
     CollectionReference collectionReference = _dataBase.collection("todos");
     String docId;
     if (toDo.docId == null) {
-      docId = _dataBase.collection("todos").document().documentID;
-      toDo = toDo.copyWith(uid: uid, status: toDo.status, docId: docId);
+      docId = _dataBase
+          .collection("todos")
+          .document()
+          .documentID;
+      toDo = toDo.copyWith(
+        uid: uid,
+        status: toDo.status,
+        docId: docId,
+        dateTime: DateTime.now(),
+      );
     }
     print(toDo);
     collectionReference

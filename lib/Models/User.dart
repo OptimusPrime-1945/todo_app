@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'User.freezed.dart';
-
 part 'User.g.dart';
 
 @freezed
@@ -11,11 +10,11 @@ abstract class User with _$User {
     @required String uid,
     String name,
     String email,
+    String imageURL,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
-
 //
 //import 'package:flutter/material.dart';
 //

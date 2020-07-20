@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapps/Widgets/Loading.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/Models/ToDo.dart';
 import 'package:todoapps/Models/User.dart';
 import 'package:todoapps/Widgets/HomePageDrawer.dart';
+import 'package:todoapps/Widgets/Loading.dart';
 import 'package:todoapps/Widgets/SimpleDialogBox.dart';
 import 'package:todoapps/Widgets/TodoList.dart';
 
@@ -29,24 +29,43 @@ class _HomeState extends State<Home> {
             value: DataBaseService(uid: this.user.uid).todos,
             child: WillPopScope(
               onWillPop: () async => false,
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text("Todo List"),
+              child: DefaultTabController(
+                length: 2,
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("Todo List"),
+                    ),
+                    centerTitle: true,
+                    backgroundColor: Colors.blue,
+                    bottom: TabBar(
+                      tabs: <Widget>[
+                        Tab(
+                          text: "Not Completed",
+                        ),
+                        Tab(
+                          text: "Completed",
+                        )
+                      ],
+                    ),
                   ),
-                  centerTitle: true,
-                  backgroundColor: Colors.blue,
-                ),
-                drawer: HomePageDrawer(),
-                body: TodoList(),
-                floatingActionButton: new FloatingActionButton(
-                  onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => SimpleDialogBox(user :this.user)),
-                  backgroundColor: Colors.blue,
-                  child: new Icon(Icons.add),
-                  tooltip: "Add New List",
+                  drawer: HomePageDrawer(),
+                  body: TabBarView(
+                    children: <Widget>[
+                      TodoList(status: false),
+                      TodoList(status: true),
+                    ],
+                  ),
+                  // bottomNavigationBar: BubbledNavigationBarWidget(),
+                  floatingActionButton: new FloatingActionButton(
+                    onPressed: () => showDialog(
+                        context: context,
+                        builder: (context) => SimpleDialogBox(user: this.user)),
+                    backgroundColor: Colors.blue,
+                    child: new Icon(Icons.add),
+                    tooltip: "Add New List",
+                  ),
                 ),
               ),
             ),

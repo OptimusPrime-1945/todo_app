@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:provider/provider.dart';
-import 'package:todoapps/Authentication/AuthService.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/Models/ToDo.dart';
 import 'package:todoapps/Models/User.dart';
@@ -83,10 +81,13 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
               child: Text("Add"),
               onPressed: () {
                 if (_fbsKey.currentState.saveAndValidate()) {
-                  ToDo entry= ToDo.fromJson(_fbsKey.currentState.value);
+                  ToDo entry = ToDo.fromJson(_fbsKey.currentState.value);
                   print(todo);
-                  print(this.todo.docId);
-                  todo= entry.copyWith(uid :this.todo.uid,docId:this.todo.docId,status:todo.status);
+                  print(this.todo.dateTime);
+                  todo = entry.copyWith(
+                      uid: this.todo.uid,
+                      docId: this.todo.docId,
+                      status: todo.status);
                   print(todo);
                   Navigator.pop(context);
                   DataBaseService(uid: user.uid).addTodo(todo);
