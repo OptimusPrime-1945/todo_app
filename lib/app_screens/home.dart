@@ -38,7 +38,6 @@ class _HomeState extends State<Home> {
                       child: Text("Todo List"),
                     ),
                     centerTitle: true,
-                    backgroundColor: Colors.blue,
                     bottom: TabBar(
                       tabs: <Widget>[
                         Tab(
@@ -62,7 +61,6 @@ class _HomeState extends State<Home> {
                     onPressed: () => showDialog(
                         context: context,
                         builder: (context) => SimpleDialogBox(user: this.user)),
-                    backgroundColor: Colors.blue,
                     child: new Icon(Icons.add),
                     tooltip: "Add New List",
                   ),

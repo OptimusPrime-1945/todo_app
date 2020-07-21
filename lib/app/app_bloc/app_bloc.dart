@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:todoapps/Models/User.dart';
+
 import 'bloc.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -17,6 +19,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       authenticated: _mapToAuthenticatedState,
     );
   }
+
 
   Stream<AppState> _mapNotAuthenticatedEventToState() async* {
     yield AppState.notAuthenticated(true, "Nothing");
