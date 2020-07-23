@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapps/Authentication/AuthService.dart';
 import 'package:todoapps/Models/User.dart';
+import 'package:todoapps/services/AuthService.dart';
 
 class HomePageDrawer extends StatefulWidget {
   @override
