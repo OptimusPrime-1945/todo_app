@@ -27,7 +27,6 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
       this.todo = new ToDo(
           uid: user.uid, todoTitle: "", description: "", status: false);
     }
-    print(todo);
     return Container(
       child: SimpleDialog(
         shape: RoundedRectangleBorder(
