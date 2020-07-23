@@ -86,7 +86,6 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
               shape: StadiumBorder(),
               child: Text("Add"),
               onPressed: () {
-                print(_fbsKey.currentState.saveAndValidate());
                 if (_fbsKey.currentState.saveAndValidate()) {
                   ToDo entry = ToDo.fromJson(_fbsKey.currentState.value);
                   todo = entry.copyWith(
