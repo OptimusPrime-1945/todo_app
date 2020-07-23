@@ -7,10 +7,11 @@ import 'package:todoapps/Models/User.dart';
 class SimpleDialogBox extends StatefulWidget {
   final User user;
   ToDo toDo;
-  SimpleDialogBox({ @required this.user, this.toDo});
+
+  SimpleDialogBox({@required this.user, this.toDo});
 
   @override
-  _SimpleDialogBoxState createState() => _SimpleDialogBoxState(user,toDo);
+  _SimpleDialogBoxState createState() => _SimpleDialogBoxState(user, toDo);
 }
 
 class _SimpleDialogBoxState extends State<SimpleDialogBox> {
@@ -22,8 +23,9 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
 
   @override
   Widget build(BuildContext context) {
-    if(this.todo == null){
-      this.todo =new ToDo(uid: user.uid,todoTitle: " ",description: " ",status: false);
+    if (this.todo == null) {
+      this.todo = new ToDo(
+          uid: user.uid, todoTitle: "", description: "", status: false);
     }
     print(todo);
     return Container(
@@ -43,12 +45,13 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FormBuilderTextField(
-                    initialValue: todo.todoTitle ?? " ",
-                    attribute: 'todoTitle' ,
+                    initialValue: todo.todoTitle,
+                    attribute: 'todoTitle',
                     validators: [
-                      FormBuilderValidators.required(),
-                      FormBuilderValidators.maxLength(10,
-                          errorText: "Limit Exceeded (10)")
+                      FormBuilderValidators.required(
+                          errorText: "Enter Todo Title"),
+                      FormBuilderValidators.maxLength(15,
+                          errorText: "Limit Exceeded (15)")
                     ],
                     decoration: InputDecoration(
                       labelText: "Enter Todo",
@@ -61,9 +64,12 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FormBuilderTextField(
-                  initialValue: todo.description ?? " ",
+                    initialValue: todo.description,
                     attribute: 'description',
-                    validators: [FormBuilderValidators.required()],
+                    validators: [
+                      FormBuilderValidators.required(
+                          errorText: "Please Enter Description"),
+                    ],
                     decoration: InputDecoration(
                       labelText: "Description",
                       border: OutlineInputBorder(
@@ -80,15 +86,15 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
               shape: StadiumBorder(),
               child: Text("Add"),
               onPressed: () {
+                print(_fbsKey.currentState.saveAndValidate());
                 if (_fbsKey.currentState.saveAndValidate()) {
                   ToDo entry = ToDo.fromJson(_fbsKey.currentState.value);
-                  print(todo);
-                  print(this.todo.dateTime);
                   todo = entry.copyWith(
-                      uid: this.todo.uid,
-                      docId: this.todo.docId,
-                      status: todo.status);
-                  print(todo);
+                    uid: this.todo.uid,
+                    docId: this.todo.docId,
+                    status: todo.status,
+                    dateTime: DateTime.now(),
+                  );
                   Navigator.pop(context);
                   DataBaseService(uid: user.uid).addTodo(todo);
                 }

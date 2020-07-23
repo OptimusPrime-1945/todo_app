@@ -28,13 +28,10 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
               ),
             ),
           ),
-          FlatButton.icon(
-            label: Text("Logout"),
-            icon: Icon(Icons.power_settings_new),
-            onPressed: () async {
-              await _auth.signOut();
-            },
-          ),
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text("Logout"),
+          )
         ],
       ),
     ));

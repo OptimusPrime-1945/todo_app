@@ -69,18 +69,13 @@ class DataBaseService {
     CollectionReference collectionReference = _dataBase.collection("todos");
     String docId;
     if (toDo.docId == null) {
-      docId = _dataBase
-          .collection("todos")
-          .document()
-          .documentID;
+      docId = _dataBase.collection("todos").document().documentID;
       toDo = toDo.copyWith(
         uid: uid,
         status: toDo.status,
         docId: docId,
-        dateTime: DateTime.now(),
       );
     }
-    print(toDo);
     collectionReference
         .document(toDo.docId)
         .setData(toDo.toJson())
