@@ -9,7 +9,6 @@ class HomePageDrawer extends StatefulWidget {
 }
 
 class _HomePageDrawerState extends State<HomePageDrawer> {
-  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +30,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text("Logout"),
+            onTap: () => AuthService().signOut(),
           )
         ],
       ),

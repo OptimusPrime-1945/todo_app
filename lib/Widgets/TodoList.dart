@@ -8,20 +8,20 @@ import 'package:todoapps/Models/User.dart';
 import 'package:todoapps/Widgets/SimpleDialogBox.dart';
 
 class TodoList extends StatefulWidget {
-  bool status;
+  bool pending;
 
-  TodoList({@required this.status});
+  TodoList({@required this.pending});
 
   @override
-  _TodoListState createState() => _TodoListState(status: this.status);
+  _TodoListState createState() => _TodoListState(pending: this.pending);
 }
 
 class _TodoListState extends State<TodoList> {
   DataBaseService _dataBaseService;
   bool isStatus;
-  bool status;
+  bool pending;
 
-  _TodoListState({@required this.status});
+  _TodoListState({@required this.pending});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _TodoListState extends State<TodoList> {
 
   Widget _listItemBuilder(BuildContext context, ToDo todo) {
     _dataBaseService = DataBaseService(uid: todo.uid);
-    if (this.status == todo.status) {
+    if (this.pending == todo.status) {
       return Card(
         child: ListTile(
           title: Text(
@@ -66,6 +66,7 @@ class _TodoListState extends State<TodoList> {
                     builder: (context) => SimpleDialogBox(
                       user: User(uid: todo.uid),
                       toDo: todo,
+                      title: "Edit Todo",
                     ),
                   );
                 },
@@ -85,6 +86,8 @@ class _TodoListState extends State<TodoList> {
           ),
         ),
       );
+    } else {
+      return Container();
     }
   }
 

@@ -7,19 +7,22 @@ import 'package:todoapps/Models/User.dart';
 class SimpleDialogBox extends StatefulWidget {
   final User user;
   ToDo toDo;
+  String title;
 
-  SimpleDialogBox({@required this.user, this.toDo});
+  SimpleDialogBox({@required this.user, this.toDo, this.title});
 
   @override
-  _SimpleDialogBoxState createState() => _SimpleDialogBoxState(user, toDo);
+  _SimpleDialogBoxState createState() =>
+      _SimpleDialogBoxState(user, toDo, title);
 }
 
 class _SimpleDialogBoxState extends State<SimpleDialogBox> {
   final _fbsKey = GlobalKey<FormBuilderState>();
   final User user;
   ToDo todo;
+  String title;
 
-  _SimpleDialogBoxState(this.user, this.todo);
+  _SimpleDialogBoxState(this.user, this.todo, this.title);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         title: Center(
-          child: Text("Add Todo"),
+          child: Text(title),
         ),
         contentPadding: EdgeInsets.all(10.0),
         children: <Widget>[
