@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/Models/ToDo.dart';
 import 'package:todoapps/Models/User.dart';
-import 'package:todoapps/Widgets/SimpleDialogBox.dart';
+import 'package:todoapps/widgets/simple_dialog_box.dart';
 
 class TodoList extends StatefulWidget {
   bool pending;

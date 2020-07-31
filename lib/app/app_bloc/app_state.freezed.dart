@@ -28,6 +28,12 @@ class _$AppStateTearOff {
   _AppStartedState started() {
     return const _AppStartedState();
   }
+
+  _AppErrorState showError(String msg) {
+    return _AppErrorState(
+      msg,
+    );
+  }
 }
 
 // ignore: unused_element
@@ -39,12 +45,14 @@ mixin _$AppState {
     @required Result notAuthenticated(bool isLogin, String msg),
     @required Result authenticated(User user),
     @required Result started(),
+    @required Result showError(String msg),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result notAuthenticated(bool isLogin, String msg),
     Result authenticated(User user),
     Result started(),
+    Result showError(String msg),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -52,12 +60,14 @@ mixin _$AppState {
     @required Result notAuthenticated(_AppNotAuthenticatedState value),
     @required Result authenticated(_AppAuthenticatedState value),
     @required Result started(_AppStartedState value),
+    @required Result showError(_AppErrorState value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result notAuthenticated(_AppNotAuthenticatedState value),
     Result authenticated(_AppAuthenticatedState value),
     Result started(_AppStartedState value),
+    Result showError(_AppErrorState value),
     @required Result orElse(),
   });
 }
@@ -159,10 +169,12 @@ class _$_AppNotAuthenticatedState
     @required Result notAuthenticated(bool isLogin, String msg),
     @required Result authenticated(User user),
     @required Result started(),
+    @required Result showError(String msg),
   }) {
     assert(notAuthenticated != null);
     assert(authenticated != null);
     assert(started != null);
+    assert(showError != null);
     return notAuthenticated(isLogin, msg);
   }
 
@@ -172,6 +184,7 @@ class _$_AppNotAuthenticatedState
     Result notAuthenticated(bool isLogin, String msg),
     Result authenticated(User user),
     Result started(),
+    Result showError(String msg),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -187,10 +200,12 @@ class _$_AppNotAuthenticatedState
     @required Result notAuthenticated(_AppNotAuthenticatedState value),
     @required Result authenticated(_AppAuthenticatedState value),
     @required Result started(_AppStartedState value),
+    @required Result showError(_AppErrorState value),
   }) {
     assert(notAuthenticated != null);
     assert(authenticated != null);
     assert(started != null);
+    assert(showError != null);
     return notAuthenticated(this);
   }
 
@@ -200,6 +215,7 @@ class _$_AppNotAuthenticatedState
     Result notAuthenticated(_AppNotAuthenticatedState value),
     Result authenticated(_AppAuthenticatedState value),
     Result started(_AppStartedState value),
+    Result showError(_AppErrorState value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -302,10 +318,12 @@ class _$_AppAuthenticatedState
     @required Result notAuthenticated(bool isLogin, String msg),
     @required Result authenticated(User user),
     @required Result started(),
+    @required Result showError(String msg),
   }) {
     assert(notAuthenticated != null);
     assert(authenticated != null);
     assert(started != null);
+    assert(showError != null);
     return authenticated(user);
   }
 
@@ -315,6 +333,7 @@ class _$_AppAuthenticatedState
     Result notAuthenticated(bool isLogin, String msg),
     Result authenticated(User user),
     Result started(),
+    Result showError(String msg),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -330,10 +349,12 @@ class _$_AppAuthenticatedState
     @required Result notAuthenticated(_AppNotAuthenticatedState value),
     @required Result authenticated(_AppAuthenticatedState value),
     @required Result started(_AppStartedState value),
+    @required Result showError(_AppErrorState value),
   }) {
     assert(notAuthenticated != null);
     assert(authenticated != null);
     assert(started != null);
+    assert(showError != null);
     return authenticated(this);
   }
 
@@ -343,6 +364,7 @@ class _$_AppAuthenticatedState
     Result notAuthenticated(_AppNotAuthenticatedState value),
     Result authenticated(_AppAuthenticatedState value),
     Result started(_AppStartedState value),
+    Result showError(_AppErrorState value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -407,10 +429,12 @@ class _$_AppStartedState
     @required Result notAuthenticated(bool isLogin, String msg),
     @required Result authenticated(User user),
     @required Result started(),
+    @required Result showError(String msg),
   }) {
     assert(notAuthenticated != null);
     assert(authenticated != null);
     assert(started != null);
+    assert(showError != null);
     return started();
   }
 
@@ -420,6 +444,7 @@ class _$_AppStartedState
     Result notAuthenticated(bool isLogin, String msg),
     Result authenticated(User user),
     Result started(),
+    Result showError(String msg),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -435,10 +460,12 @@ class _$_AppStartedState
     @required Result notAuthenticated(_AppNotAuthenticatedState value),
     @required Result authenticated(_AppAuthenticatedState value),
     @required Result started(_AppStartedState value),
+    @required Result showError(_AppErrorState value),
   }) {
     assert(notAuthenticated != null);
     assert(authenticated != null);
     assert(started != null);
+    assert(showError != null);
     return started(this);
   }
 
@@ -448,6 +475,7 @@ class _$_AppStartedState
     Result notAuthenticated(_AppNotAuthenticatedState value),
     Result authenticated(_AppAuthenticatedState value),
     Result started(_AppStartedState value),
+    Result showError(_AppErrorState value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -460,4 +488,137 @@ class _$_AppStartedState
 
 abstract class _AppStartedState implements AppState {
   const factory _AppStartedState() = _$_AppStartedState;
+}
+
+abstract class _$AppErrorStateCopyWith<$Res> {
+  factory _$AppErrorStateCopyWith(
+          _AppErrorState value, $Res Function(_AppErrorState) then) =
+      __$AppErrorStateCopyWithImpl<$Res>;
+
+  $Res call({String msg});
+}
+
+class __$AppErrorStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
+    implements _$AppErrorStateCopyWith<$Res> {
+  __$AppErrorStateCopyWithImpl(
+      _AppErrorState _value, $Res Function(_AppErrorState) _then)
+      : super(_value, (v) => _then(v as _AppErrorState));
+
+  @override
+  _AppErrorState get _value => super._value as _AppErrorState;
+
+  @override
+  $Res call({
+    Object msg = freezed,
+  }) {
+    return _then(_AppErrorState(
+      msg == freezed ? _value.msg : msg as String,
+    ));
+  }
+}
+
+class _$_AppErrorState with DiagnosticableTreeMixin implements _AppErrorState {
+  const _$_AppErrorState(this.msg) : assert(msg != null);
+
+  @override
+  final String msg;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AppState.showError(msg: $msg)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'AppState.showError'))
+      ..add(DiagnosticsProperty('msg', msg));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _AppErrorState &&
+            (identical(other.msg, msg) ||
+                const DeepCollectionEquality().equals(other.msg, msg)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(msg);
+
+  @override
+  _$AppErrorStateCopyWith<_AppErrorState> get copyWith =>
+      __$AppErrorStateCopyWithImpl<_AppErrorState>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required Result notAuthenticated(bool isLogin, String msg),
+    @required Result authenticated(User user),
+    @required Result started(),
+    @required Result showError(String msg),
+  }) {
+    assert(notAuthenticated != null);
+    assert(authenticated != null);
+    assert(started != null);
+    assert(showError != null);
+    return showError(msg);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result notAuthenticated(bool isLogin, String msg),
+    Result authenticated(User user),
+    Result started(),
+    Result showError(String msg),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (showError != null) {
+      return showError(msg);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result notAuthenticated(_AppNotAuthenticatedState value),
+    @required Result authenticated(_AppAuthenticatedState value),
+    @required Result started(_AppStartedState value),
+    @required Result showError(_AppErrorState value),
+  }) {
+    assert(notAuthenticated != null);
+    assert(authenticated != null);
+    assert(started != null);
+    assert(showError != null);
+    return showError(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result notAuthenticated(_AppNotAuthenticatedState value),
+    Result authenticated(_AppAuthenticatedState value),
+    Result started(_AppStartedState value),
+    Result showError(_AppErrorState value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (showError != null) {
+      return showError(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _AppErrorState implements AppState {
+  const factory _AppErrorState(String msg) = _$_AppErrorState;
+
+  String get msg;
+
+  _$AppErrorStateCopyWith<_AppErrorState> get copyWith;
 }

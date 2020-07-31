@@ -41,9 +41,7 @@ mixin _$ToDo {
   String get todoTitle;
   bool get status;
   String get description;
-
   String get uid;
-
   DateTime get dateTime;
 
   Map<String, dynamic> toJson();
@@ -54,12 +52,13 @@ abstract class $ToDoCopyWith<$Res> {
   factory $ToDoCopyWith(ToDo value, $Res Function(ToDo) then) =
       _$ToDoCopyWithImpl<$Res>;
 
-  $Res call({String docId,
-    String todoTitle,
-    bool status,
-    String description,
-    String uid,
-    DateTime dateTime});
+  $Res call(
+      {String docId,
+      String todoTitle,
+      bool status,
+      String description,
+      String uid,
+      DateTime dateTime});
 }
 
 class _$ToDoCopyWithImpl<$Res> implements $ToDoCopyWith<$Res> {
@@ -236,13 +235,10 @@ abstract class _ToDo implements ToDo {
 
   @override
   String get description;
-
   @override
   String get uid;
-
   @override
   DateTime get dateTime;
-
   @override
   _$ToDoCopyWith<_ToDo> get copyWith;
 }

@@ -20,9 +20,19 @@ class _$AppEventTearOff {
     return const _AppLoadingEvent();
   }
 
+  _AppLoggingEvent logging() {
+    return const _AppLoggingEvent();
+  }
+
   _AppAuthenticatedEvent authenticated(User user) {
     return _AppAuthenticatedEvent(
       user,
+    );
+  }
+
+  _AppErrorEvent error(String msg) {
+    return _AppErrorEvent(
+      msg,
     );
   }
 }
@@ -35,26 +45,34 @@ mixin _$AppEvent {
   Result when<Result extends Object>({
     @required Result notAuthenticated(),
     @required Result loading(),
+    @required Result logging(),
     @required Result authenticated(User user),
+    @required Result error(String msg),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result notAuthenticated(),
     Result loading(),
+    Result logging(),
     Result authenticated(User user),
+    Result error(String msg),
     @required Result orElse(),
   });
   @optionalTypeArgs
   Result map<Result extends Object>({
     @required Result notAuthenticated(_AppNotAuthenticatedEvent value),
     @required Result loading(_AppLoadingEvent value),
+    @required Result logging(_AppLoggingEvent value),
     @required Result authenticated(_AppAuthenticatedEvent value),
+    @required Result error(_AppErrorEvent value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result notAuthenticated(_AppNotAuthenticatedEvent value),
     Result loading(_AppLoadingEvent value),
+    Result logging(_AppLoggingEvent value),
     Result authenticated(_AppAuthenticatedEvent value),
+    Result error(_AppErrorEvent value),
     @required Result orElse(),
   });
 }
@@ -119,11 +137,15 @@ class _$_AppNotAuthenticatedEvent
   Result when<Result extends Object>({
     @required Result notAuthenticated(),
     @required Result loading(),
+    @required Result logging(),
     @required Result authenticated(User user),
+    @required Result error(String msg),
   }) {
     assert(notAuthenticated != null);
     assert(loading != null);
+    assert(logging != null);
     assert(authenticated != null);
+    assert(error != null);
     return notAuthenticated();
   }
 
@@ -132,7 +154,9 @@ class _$_AppNotAuthenticatedEvent
   Result maybeWhen<Result extends Object>({
     Result notAuthenticated(),
     Result loading(),
+    Result logging(),
     Result authenticated(User user),
+    Result error(String msg),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -147,11 +171,15 @@ class _$_AppNotAuthenticatedEvent
   Result map<Result extends Object>({
     @required Result notAuthenticated(_AppNotAuthenticatedEvent value),
     @required Result loading(_AppLoadingEvent value),
+    @required Result logging(_AppLoggingEvent value),
     @required Result authenticated(_AppAuthenticatedEvent value),
+    @required Result error(_AppErrorEvent value),
   }) {
     assert(notAuthenticated != null);
     assert(loading != null);
+    assert(logging != null);
     assert(authenticated != null);
+    assert(error != null);
     return notAuthenticated(this);
   }
 
@@ -160,7 +188,9 @@ class _$_AppNotAuthenticatedEvent
   Result maybeMap<Result extends Object>({
     Result notAuthenticated(_AppNotAuthenticatedEvent value),
     Result loading(_AppLoadingEvent value),
+    Result logging(_AppLoggingEvent value),
     Result authenticated(_AppAuthenticatedEvent value),
+    Result error(_AppErrorEvent value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -220,11 +250,15 @@ class _$_AppLoadingEvent
   Result when<Result extends Object>({
     @required Result notAuthenticated(),
     @required Result loading(),
+    @required Result logging(),
     @required Result authenticated(User user),
+    @required Result error(String msg),
   }) {
     assert(notAuthenticated != null);
     assert(loading != null);
+    assert(logging != null);
     assert(authenticated != null);
+    assert(error != null);
     return loading();
   }
 
@@ -233,7 +267,9 @@ class _$_AppLoadingEvent
   Result maybeWhen<Result extends Object>({
     Result notAuthenticated(),
     Result loading(),
+    Result logging(),
     Result authenticated(User user),
+    Result error(String msg),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -248,11 +284,15 @@ class _$_AppLoadingEvent
   Result map<Result extends Object>({
     @required Result notAuthenticated(_AppNotAuthenticatedEvent value),
     @required Result loading(_AppLoadingEvent value),
+    @required Result logging(_AppLoggingEvent value),
     @required Result authenticated(_AppAuthenticatedEvent value),
+    @required Result error(_AppErrorEvent value),
   }) {
     assert(notAuthenticated != null);
     assert(loading != null);
+    assert(logging != null);
     assert(authenticated != null);
+    assert(error != null);
     return loading(this);
   }
 
@@ -261,7 +301,9 @@ class _$_AppLoadingEvent
   Result maybeMap<Result extends Object>({
     Result notAuthenticated(_AppNotAuthenticatedEvent value),
     Result loading(_AppLoadingEvent value),
+    Result logging(_AppLoggingEvent value),
     Result authenticated(_AppAuthenticatedEvent value),
+    Result error(_AppErrorEvent value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -276,10 +318,124 @@ abstract class _AppLoadingEvent implements AppEvent {
   const factory _AppLoadingEvent() = _$_AppLoadingEvent;
 }
 
+abstract class _$AppLoggingEventCopyWith<$Res> {
+  factory _$AppLoggingEventCopyWith(
+          _AppLoggingEvent value, $Res Function(_AppLoggingEvent) then) =
+      __$AppLoggingEventCopyWithImpl<$Res>;
+}
+
+class __$AppLoggingEventCopyWithImpl<$Res> extends _$AppEventCopyWithImpl<$Res>
+    implements _$AppLoggingEventCopyWith<$Res> {
+  __$AppLoggingEventCopyWithImpl(
+      _AppLoggingEvent _value, $Res Function(_AppLoggingEvent) _then)
+      : super(_value, (v) => _then(v as _AppLoggingEvent));
+
+  @override
+  _AppLoggingEvent get _value => super._value as _AppLoggingEvent;
+}
+
+class _$_AppLoggingEvent
+    with DiagnosticableTreeMixin
+    implements _AppLoggingEvent {
+  const _$_AppLoggingEvent();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AppEvent.logging()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'AppEvent.logging'));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) || (other is _AppLoggingEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required Result notAuthenticated(),
+    @required Result loading(),
+    @required Result logging(),
+    @required Result authenticated(User user),
+    @required Result error(String msg),
+  }) {
+    assert(notAuthenticated != null);
+    assert(loading != null);
+    assert(logging != null);
+    assert(authenticated != null);
+    assert(error != null);
+    return logging();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result notAuthenticated(),
+    Result loading(),
+    Result logging(),
+    Result authenticated(User user),
+    Result error(String msg),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (logging != null) {
+      return logging();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result notAuthenticated(_AppNotAuthenticatedEvent value),
+    @required Result loading(_AppLoadingEvent value),
+    @required Result logging(_AppLoggingEvent value),
+    @required Result authenticated(_AppAuthenticatedEvent value),
+    @required Result error(_AppErrorEvent value),
+  }) {
+    assert(notAuthenticated != null);
+    assert(loading != null);
+    assert(logging != null);
+    assert(authenticated != null);
+    assert(error != null);
+    return logging(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result notAuthenticated(_AppNotAuthenticatedEvent value),
+    Result loading(_AppLoadingEvent value),
+    Result logging(_AppLoggingEvent value),
+    Result authenticated(_AppAuthenticatedEvent value),
+    Result error(_AppErrorEvent value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (logging != null) {
+      return logging(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _AppLoggingEvent implements AppEvent {
+  const factory _AppLoggingEvent() = _$_AppLoggingEvent;
+}
+
 abstract class _$AppAuthenticatedEventCopyWith<$Res> {
   factory _$AppAuthenticatedEventCopyWith(_AppAuthenticatedEvent value,
           $Res Function(_AppAuthenticatedEvent) then) =
       __$AppAuthenticatedEventCopyWithImpl<$Res>;
+
   $Res call({User user});
 
   $UserCopyWith<$Res> get user;
@@ -358,11 +514,15 @@ class _$_AppAuthenticatedEvent
   Result when<Result extends Object>({
     @required Result notAuthenticated(),
     @required Result loading(),
+    @required Result logging(),
     @required Result authenticated(User user),
+    @required Result error(String msg),
   }) {
     assert(notAuthenticated != null);
     assert(loading != null);
+    assert(logging != null);
     assert(authenticated != null);
+    assert(error != null);
     return authenticated(user);
   }
 
@@ -371,7 +531,9 @@ class _$_AppAuthenticatedEvent
   Result maybeWhen<Result extends Object>({
     Result notAuthenticated(),
     Result loading(),
+    Result logging(),
     Result authenticated(User user),
+    Result error(String msg),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -386,11 +548,15 @@ class _$_AppAuthenticatedEvent
   Result map<Result extends Object>({
     @required Result notAuthenticated(_AppNotAuthenticatedEvent value),
     @required Result loading(_AppLoadingEvent value),
+    @required Result logging(_AppLoggingEvent value),
     @required Result authenticated(_AppAuthenticatedEvent value),
+    @required Result error(_AppErrorEvent value),
   }) {
     assert(notAuthenticated != null);
     assert(loading != null);
+    assert(logging != null);
     assert(authenticated != null);
+    assert(error != null);
     return authenticated(this);
   }
 
@@ -399,7 +565,9 @@ class _$_AppAuthenticatedEvent
   Result maybeMap<Result extends Object>({
     Result notAuthenticated(_AppNotAuthenticatedEvent value),
     Result loading(_AppLoadingEvent value),
+    Result logging(_AppLoggingEvent value),
     Result authenticated(_AppAuthenticatedEvent value),
+    Result error(_AppErrorEvent value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -414,5 +582,144 @@ abstract class _AppAuthenticatedEvent implements AppEvent {
   const factory _AppAuthenticatedEvent(User user) = _$_AppAuthenticatedEvent;
 
   User get user;
+
   _$AppAuthenticatedEventCopyWith<_AppAuthenticatedEvent> get copyWith;
+}
+
+abstract class _$AppErrorEventCopyWith<$Res> {
+  factory _$AppErrorEventCopyWith(_AppErrorEvent value,
+      $Res Function(_AppErrorEvent) then) =
+  __$AppErrorEventCopyWithImpl<$Res>;
+
+  $Res call({String msg});
+}
+
+class __$AppErrorEventCopyWithImpl<$Res> extends _$AppEventCopyWithImpl<$Res>
+    implements _$AppErrorEventCopyWith<$Res> {
+  __$AppErrorEventCopyWithImpl(_AppErrorEvent _value,
+      $Res Function(_AppErrorEvent) _then)
+      : super(_value, (v) => _then(v as _AppErrorEvent));
+
+  @override
+  _AppErrorEvent get _value => super._value as _AppErrorEvent;
+
+  @override
+  $Res call({
+    Object msg = freezed,
+  }) {
+    return _then(_AppErrorEvent(
+      msg == freezed ? _value.msg : msg as String,
+    ));
+  }
+}
+
+class _$_AppErrorEvent with DiagnosticableTreeMixin implements _AppErrorEvent {
+  const _$_AppErrorEvent(this.msg) : assert(msg != null);
+
+  @override
+  final String msg;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AppEvent.error(msg: $msg)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'AppEvent.error'))..add(
+        DiagnosticsProperty('msg', msg));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _AppErrorEvent &&
+            (identical(other.msg, msg) ||
+                const DeepCollectionEquality().equals(other.msg, msg)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(msg);
+
+  @override
+  _$AppErrorEventCopyWith<_AppErrorEvent> get copyWith =>
+      __$AppErrorEventCopyWithImpl<_AppErrorEvent>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required Result notAuthenticated(),
+    @required Result loading(),
+    @required Result logging(),
+    @required Result authenticated(User user),
+    @required Result error(String msg),
+  }) {
+    assert(notAuthenticated != null);
+    assert(loading != null);
+    assert(logging != null);
+    assert(authenticated != null);
+    assert(error != null);
+    return error(msg);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result notAuthenticated(),
+    Result loading(),
+    Result logging(),
+    Result authenticated(User user),
+    Result error(String msg),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (error != null) {
+      return error(msg);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result notAuthenticated(_AppNotAuthenticatedEvent value),
+    @required Result loading(_AppLoadingEvent value),
+    @required Result logging(_AppLoggingEvent value),
+    @required Result authenticated(_AppAuthenticatedEvent value),
+    @required Result error(_AppErrorEvent value),
+  }) {
+    assert(notAuthenticated != null);
+    assert(loading != null);
+    assert(logging != null);
+    assert(authenticated != null);
+    assert(error != null);
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result notAuthenticated(_AppNotAuthenticatedEvent value),
+    Result loading(_AppLoadingEvent value),
+    Result logging(_AppLoggingEvent value),
+    Result authenticated(_AppAuthenticatedEvent value),
+    Result error(_AppErrorEvent value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _AppErrorEvent implements AppEvent {
+  const factory _AppErrorEvent(String msg) = _$_AppErrorEvent;
+
+  String get msg;
+
+  _$AppErrorEventCopyWith<_AppErrorEvent> get copyWith;
 }

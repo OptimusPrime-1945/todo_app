@@ -10,5 +10,9 @@ abstract class AppEvent with _$AppEvent {
 
   const factory AppEvent.loading() = _AppLoadingEvent;
 
-  const factory AppEvent.authenticated(User user) =_AppAuthenticatedEvent;
+  const factory AppEvent.logging() = _AppLoggingEvent;
+
+  const factory AppEvent.authenticated(User user) = _AppAuthenticatedEvent;
+
+  const factory AppEvent.error(String msg) = _AppErrorEvent;
 }

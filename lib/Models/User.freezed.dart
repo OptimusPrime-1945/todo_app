@@ -32,9 +32,7 @@ const $User = _$UserTearOff();
 mixin _$User {
   String get uid;
   String get name;
-
   String get email;
-
   String get imageURL;
 
   Map<String, dynamic> toJson();
@@ -44,7 +42,6 @@ mixin _$User {
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res>;
-
   $Res call({String uid, String name, String email, String imageURL});
 }
 
@@ -74,7 +71,6 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
 abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) then) =
       __$UserCopyWithImpl<$Res>;
-
   @override
   $Res call({String uid, String name, String email, String imageURL});
 }
@@ -170,10 +166,11 @@ class _$_User with DiagnosticableTreeMixin implements _User {
 }
 
 abstract class _User implements User {
-  const factory _User({@required String uid,
-    String name,
-    String email,
-    String imageURL}) = _$_User;
+  const factory _User(
+      {@required String uid,
+      String name,
+      String email,
+      String imageURL}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
@@ -188,7 +185,6 @@ abstract class _User implements User {
 
   @override
   String get imageURL;
-
   @override
   _$UserCopyWith<_User> get copyWith;
 }

@@ -2,11 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapps/providers/AuthProvider.dart';
-import 'package:todoapps/services/AuthService.dart';
-import 'package:todoapps/Models/User.dart';
 import 'package:todoapps/app/app_bloc/app_bloc.dart';
+import 'package:todoapps/providers/AuthProvider.dart';
 import 'package:todoapps/router/router.gr.dart';
+import 'package:todoapps/services/AuthService.dart';
 
 class TODO extends StatefulWidget {
   @override
@@ -16,8 +15,12 @@ class TODO extends StatefulWidget {
 class _TODOState extends State<TODO> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: AuthService().user,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthService>(
+          create: (context) => AuthService(),
+        )
+      ],
       child: BlocProvider<AppBloc>(
         create: (_) => AppBloc(),
         child: MultiProvider(
@@ -37,7 +40,6 @@ class _TODOState extends State<TODO> {
             theme: ThemeData(
               primaryColor: Colors.blue,
               accentColor: Colors.blueAccent,
-              buttonColor: Colors.blue,
               buttonTheme: const ButtonThemeData(
                 textTheme: ButtonTextTheme.primary,
                 buttonColor: Colors.blue,

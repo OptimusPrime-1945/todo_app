@@ -17,9 +17,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       notAuthenticated: _mapNotAuthenticatedEventToState,
       loading: _mapToLoadingState,
       authenticated: _mapToAuthenticatedState,
+      error: _mapErrorEventToState,
+      logging: _mapLoggingState,
     );
   }
-
 
   Stream<AppState> _mapNotAuthenticatedEventToState() async* {
     yield AppState.notAuthenticated(true, "Nothing");
@@ -35,5 +36,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Stream<AppState> _mapToAuthenticatedState(User user) async* {
     yield AppState.authenticated(user: user);
+  }
+
+  Stream<AppState> _mapLoggingState() async* {
+    yield state.maybeMap(
+        notAuthenticated: (state) =>
+            state.copyWith(isLogin: false, msg: "Logging"),
+        orElse: () => state);
+  }
+
+  Stream<AppState> _mapErrorEventToState(String msg) async* {
+    yield AppState.showError(msg);
   }
 }

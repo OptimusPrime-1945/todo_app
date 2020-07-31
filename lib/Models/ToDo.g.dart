@@ -19,8 +19,7 @@ _$_ToDo _$_$_ToDoFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$_$_ToDoToJson(_$_ToDo instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$_$_ToDoToJson(_$_ToDo instance) => <String, dynamic>{
       'docId': instance.docId,
       'todoTitle': instance.todoTitle,
       'status': instance.status,

@@ -13,4 +13,6 @@ abstract class AppState with _$AppState {
       _AppAuthenticatedState;
 
   const factory AppState.started() = _AppStartedState;
+
+  const factory AppState.showError(String msg) = _AppErrorState;
 }
