@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoapps/Database/DataBaseService.dart';
 import 'package:todoapps/Models/User.dart';
 import 'package:todoapps/app/app_bloc/app_bloc.dart';
 import 'package:todoapps/app/app_bloc/bloc.dart';
@@ -58,6 +59,7 @@ class InitialPage extends StatelessWidget {
   }
 
   Widget _mapToHomePage(User user) {
+    DataBaseService().updateUserData(user: user);
     return Home(
       user: user,
     );
