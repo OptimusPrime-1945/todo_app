@@ -38,6 +38,9 @@ class _TodoListState extends State<TodoList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           CircularProgressIndicator(),
+          SizedBox(
+            width: 10,
+          ),
           Text("Loading Please wait"),
         ],
       );
