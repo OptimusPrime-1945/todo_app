@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:todoapps/Models/User.dart';
-import 'package:todoapps/app/app_bloc/app_bloc.dart';
-import 'package:todoapps/app/app_bloc/app_event.dart';
+import 'package:todoapps/app/app_bloc/bloc.dart';
 import 'package:todoapps/services/AuthService.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -10,6 +9,8 @@ class AuthProvider with ChangeNotifier {
   User currentUser;
 
   bool get isAuthenticated => currentUser != null;
+
+  User get user => currentUser;
 
   AuthProvider({@required this.appBloc, @required this.authService}) {
     authService.onAuthStateChanged.listen((User newUser) {
@@ -22,14 +23,21 @@ class AuthProvider with ChangeNotifier {
       }
     });
   }
-  void signInWithGoogle()async{
+
+  void signInWithGoogle() async {
     appBloc.add(AppEvent.loading());
-    if(! await authService.signInWithGoogle()){
+    if (!await authService.signInWithGoogle()) {
+      appBloc.add(AppEvent.error("Login Cancled"));
       appBloc.add(AppEvent.notAuthenticated());
-    }else{
-      appBloc.add(AppEvent.authenticated(currentUser));
+    } else {
+      appBloc.add(AppEvent.logging());
+      if (!await authService.loggingIn()) {
+        appBloc.add(AppEvent.error("Login Failed"));
+        appBloc.add(AppEvent.notAuthenticated());
+      }
     }
   }
+
   Future<void> signOut() async {
     return authService.signOut();
   }

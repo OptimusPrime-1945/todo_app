@@ -115,9 +115,7 @@ class __$AppNotAuthenticatedStateCopyWithImpl<$Res>
   }
 }
 
-class _$_AppNotAuthenticatedState
-    with DiagnosticableTreeMixin
-    implements _AppNotAuthenticatedState {
+class _$_AppNotAuthenticatedState implements _AppNotAuthenticatedState {
   const _$_AppNotAuthenticatedState(this.isLogin, this.msg)
       : assert(isLogin != null),
         assert(msg != null);
@@ -128,17 +126,8 @@ class _$_AppNotAuthenticatedState
   final String msg;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'AppState.notAuthenticated(isLogin: $isLogin, msg: $msg)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'AppState.notAuthenticated'))
-      ..add(DiagnosticsProperty('isLogin', isLogin))
-      ..add(DiagnosticsProperty('msg', msg));
   }
 
   @override
@@ -274,25 +263,15 @@ class __$AppAuthenticatedStateCopyWithImpl<$Res>
   }
 }
 
-class _$_AppAuthenticatedState
-    with DiagnosticableTreeMixin
-    implements _AppAuthenticatedState {
+class _$_AppAuthenticatedState implements _AppAuthenticatedState {
   const _$_AppAuthenticatedState({@required this.user}) : assert(user != null);
 
   @override
   final User user;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'AppState.authenticated(user: $user)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'AppState.authenticated'))
-      ..add(DiagnosticsProperty('user', user));
   }
 
   @override
@@ -399,20 +378,12 @@ class __$AppStartedStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
   _AppStartedState get _value => super._value as _AppStartedState;
 }
 
-class _$_AppStartedState
-    with DiagnosticableTreeMixin
-    implements _AppStartedState {
+class _$_AppStartedState implements _AppStartedState {
   const _$_AppStartedState();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'AppState.started()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties..add(DiagnosticsProperty('type', 'AppState.started'));
   }
 
   @override
@@ -494,7 +465,6 @@ abstract class _$AppErrorStateCopyWith<$Res> {
   factory _$AppErrorStateCopyWith(
           _AppErrorState value, $Res Function(_AppErrorState) then) =
       __$AppErrorStateCopyWithImpl<$Res>;
-
   $Res call({String msg});
 }
 
@@ -517,23 +487,15 @@ class __$AppErrorStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
   }
 }
 
-class _$_AppErrorState with DiagnosticableTreeMixin implements _AppErrorState {
+class _$_AppErrorState implements _AppErrorState {
   const _$_AppErrorState(this.msg) : assert(msg != null);
 
   @override
   final String msg;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'AppState.showError(msg: $msg)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'AppState.showError'))
-      ..add(DiagnosticsProperty('msg', msg));
   }
 
   @override
@@ -619,6 +581,5 @@ abstract class _AppErrorState implements AppState {
   const factory _AppErrorState(String msg) = _$_AppErrorState;
 
   String get msg;
-
   _$AppErrorStateCopyWith<_AppErrorState> get copyWith;
 }

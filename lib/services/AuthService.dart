@@ -5,52 +5,68 @@ import 'package:todoapps/Models/User.dart';
 
 class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  AuthCredential _authCredential;
 
-  Future<bool> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount googleSignInAccount =
-          await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-      final AuthResult authResult =
-          await _auth.signInWithCredential(credential);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future signOut() async {
-    try {
-      await googleSignIn.signOut();
-      await _auth.signOut();
-      notifyListeners();
-    } catch (e) {
-      print(e);
-      return null;
-    }
+  User _userFromFireBaseUser(FirebaseUser firebaseUser) {
+    return firebaseUser != null
+        ? User(
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            imageURL: firebaseUser.photoUrl,
+            name: firebaseUser.displayName,
+          )
+        : null;
   }
 
   Stream<User> get onAuthStateChanged {
     return _auth.onAuthStateChanged.map(_userFromFireBaseUser);
   }
 
-  User _userFromFireBaseUser(FirebaseUser user) => user != null
-      ? User(
-          uid: user.uid,
-          email: user.email,
-          name: user.displayName,
-          imageURL: user.photoUrl,
-        )
-      : null;
+  Future signOut() async {
+    try {
+      _auth.signOut();
+      _googleSignIn.signOut();
+      notifyListeners();
+    } catch (e) {
+      debugPrint(e);
+    }
+  }
 
-  Stream<User> get user {
-    return _auth.onAuthStateChanged.map(_userFromFireBaseUser);
+  Future<bool> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount googleSignInAccount =
+          await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+      _authCredential = GoogleAuthProvider.getCredential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> loggingIn() async {
+    try {
+      await _auth.signInWithCredential(_authCredential);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      notifyListeners();
+      return false;
+    }
+  }
+
+  void googleSignOut() async {
+    try {
+      await _auth.signOut();
+      await _googleSignIn.signOut();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 }

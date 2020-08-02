@@ -19,24 +19,22 @@ class _TODOState extends State<TODO> {
       providers: [
         RepositoryProvider<AuthService>(
           create: (context) => AuthService(),
-        )
+        ),
       ],
       child: BlocProvider<AppBloc>(
         create: (_) => AppBloc(),
         child: MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthProvider>(
-              create: (BuildContext context) => AuthProvider(
+              create: (context) => AuthProvider(
                 appBloc: BlocProvider.of<AppBloc>(context),
                 authService: AuthService(),
               ),
             ),
           ],
           child: MaterialApp(
-            home: ExtendedNavigator<Router>(
-              router: Router(),
-            ),
             debugShowCheckedModeBanner: false,
+            title: "Todo app",
             theme: ThemeData(
               primaryColor: Colors.blue,
               accentColor: Colors.blueAccent,
@@ -44,6 +42,9 @@ class _TODOState extends State<TODO> {
                 textTheme: ButtonTextTheme.primary,
                 buttonColor: Colors.blue,
               ),
+            ),
+            home: ExtendedNavigator<Router>(
+              router: Router(),
             ),
           ),
         ),

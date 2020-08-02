@@ -1,6 +1,4 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoapps/Models/User.dart';
 
 import 'bloc.dart';
@@ -10,23 +8,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppState get initialState => AppState.started();
 
   @override
-  Stream<AppState> mapEventToState(
-    AppEvent event,
-  ) async* {
+  Stream<AppState> mapEventToState(AppEvent event) async* {
     yield* event.when(
       notAuthenticated: _mapNotAuthenticatedEventToState,
-      loading: _mapToLoadingState,
-      authenticated: _mapToAuthenticatedState,
+      authenticated: _mapAuthenticatedEventToState,
+      loading: _mapLoadingState,
       error: _mapErrorEventToState,
       logging: _mapLoggingState,
     );
   }
 
-  Stream<AppState> _mapNotAuthenticatedEventToState() async* {
-    yield AppState.notAuthenticated(true, "Nothing");
-  }
-
-  Stream<AppState> _mapToLoadingState() async* {
+  Stream<AppState> _mapLoadingState() async* {
     yield state.maybeMap(
       notAuthenticated: (state) =>
           state.copyWith(isLogin: false, msg: "Loading"),
@@ -34,18 +26,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
   }
 
-  Stream<AppState> _mapToAuthenticatedState(User user) async* {
-    yield AppState.authenticated(user: user);
+  Stream<AppState> _mapNotAuthenticatedEventToState() async* {
+    yield AppState.notAuthenticated(true, "nothing");
   }
 
-  Stream<AppState> _mapLoggingState() async* {
-    yield state.maybeMap(
-        notAuthenticated: (state) =>
-            state.copyWith(isLogin: false, msg: "Logging"),
-        orElse: () => state);
+  Stream<AppState> _mapAuthenticatedEventToState(User user) async* {
+    yield AppState.authenticated(user: user);
   }
 
   Stream<AppState> _mapErrorEventToState(String msg) async* {
     yield AppState.showError(msg);
+  }
+
+  Stream<AppState> _mapLoggingState() async* {
+    yield state.maybeMap(
+      notAuthenticated: (state) =>
+          state.copyWith(isLogin: false, msg: "Looging In"),
+      orElse: () => state,
+    );
   }
 }

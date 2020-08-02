@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:todoapps/Models/User.dart';
 
@@ -10,7 +9,7 @@ abstract class AppState with _$AppState {
       _AppNotAuthenticatedState;
 
   const factory AppState.authenticated({@required User user}) =
-      _AppAuthenticatedState;
+  _AppAuthenticatedState;
 
   const factory AppState.started() = _AppStartedState;
 

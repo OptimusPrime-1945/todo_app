@@ -51,7 +51,6 @@ mixin _$ToDo {
 abstract class $ToDoCopyWith<$Res> {
   factory $ToDoCopyWith(ToDo value, $Res Function(ToDo) then) =
       _$ToDoCopyWithImpl<$Res>;
-
   $Res call(
       {String docId,
       String todoTitle,
@@ -82,7 +81,7 @@ class _$ToDoCopyWithImpl<$Res> implements $ToDoCopyWith<$Res> {
       todoTitle: todoTitle == freezed ? _value.todoTitle : todoTitle as String,
       status: status == freezed ? _value.status : status as bool,
       description:
-      description == freezed ? _value.description : description as String,
+          description == freezed ? _value.description : description as String,
       uid: uid == freezed ? _value.uid : uid as String,
       dateTime: dateTime == freezed ? _value.dateTime : dateTime as DateTime,
     ));

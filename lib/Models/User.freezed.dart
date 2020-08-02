@@ -100,7 +100,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
 }
 
 @JsonSerializable()
-class _$_User with DiagnosticableTreeMixin implements _User {
+class _$_User implements _User {
   const _$_User({@required this.uid, this.name, this.email, this.imageURL})
       : assert(uid != null);
 
@@ -117,19 +117,8 @@ class _$_User with DiagnosticableTreeMixin implements _User {
   final String imageURL;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'User(uid: $uid, name: $name, email: $email, imageURL: $imageURL)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'User'))
-      ..add(DiagnosticsProperty('uid', uid))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('email', email))
-      ..add(DiagnosticsProperty('imageURL', imageURL));
   }
 
   @override
@@ -176,13 +165,10 @@ abstract class _User implements User {
 
   @override
   String get uid;
-
   @override
   String get name;
-
   @override
   String get email;
-
   @override
   String get imageURL;
   @override
