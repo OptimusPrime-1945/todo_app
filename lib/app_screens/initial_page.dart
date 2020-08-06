@@ -59,7 +59,7 @@ class InitialPage extends StatelessWidget {
   }
 
   Widget _mapToHomePage(User user) {
-    DataBaseService().updateUserData(user: user);
+    DataBaseService(uid: user.uid).updateUserData(user: user);
     return Home(
       user: user,
     );

@@ -10,7 +10,7 @@ class DataBaseService {
   DataBaseService({this.uid});
 
   Future updateUserData({@required User user}) async {
-    return await _dataBase.collection("users").document(uid).setData({
+    return await _dataBase.collection("users").document(user.uid).setData({
       'name': user.name,
       'email': user.email,
       'uid': user.uid,
