@@ -1,4 +1,11 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapps/app/TODO.dart';
 
-void main() => runApp(TODO());
+import 'app/TODO.dart';
+
+void main() {
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  runApp(TODO());
+}

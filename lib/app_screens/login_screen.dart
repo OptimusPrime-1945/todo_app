@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapps/providers/AuthProvider.dart';
-import 'package:todoapps/widgets/loading_widget.dart';
+import 'package:todo_app/providers/AuthProvider.dart';
+import 'package:todo_app/widgets/loading_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool isLogin;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapps/Models/User.dart';
-import 'package:todoapps/providers/AuthProvider.dart';
+import 'package:todo_app/models/User.dart';
+import 'package:todo_app/providers/AuthProvider.dart';
 
 class HomePageDrawer extends StatefulWidget {
   final User user;

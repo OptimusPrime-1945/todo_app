@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapps/Models/ToDo.dart';
-import 'package:todoapps/Models/User.dart';
+import 'package:todo_app/models/ToDo.dart';
+import 'package:todo_app/models/User.dart';
 
 class DataBaseService {
   final Firestore _dataBase = Firestore.instance;

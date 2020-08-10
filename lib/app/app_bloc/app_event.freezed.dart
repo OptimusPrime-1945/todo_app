@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named
+// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
 
 part of 'app_event.dart';
 
@@ -12,24 +12,29 @@ T _$identity<T>(T value) => value;
 class _$AppEventTearOff {
   const _$AppEventTearOff();
 
+// ignore: unused_element
   _AppNotAuthenticatedEvent notAuthenticated() {
     return const _AppNotAuthenticatedEvent();
   }
 
+// ignore: unused_element
   _AppLoggingEvent logging() {
     return const _AppLoggingEvent();
   }
 
+// ignore: unused_element
   _AppAuthenticatedEvent authenticated(User user) {
     return _AppAuthenticatedEvent(
       user,
     );
   }
 
+// ignore: unused_element
   _AppLoadingEvent loading() {
     return const _AppLoadingEvent();
   }
 
+// ignore: unused_element
   _AppErrorEvent error(String msg) {
     return _AppErrorEvent(
       msg,
@@ -442,7 +447,6 @@ abstract class _AppAuthenticatedEvent implements AppEvent {
   const factory _AppAuthenticatedEvent(User user) = _$_AppAuthenticatedEvent;
 
   User get user;
-
   _$AppAuthenticatedEventCopyWith<_AppAuthenticatedEvent> get copyWith;
 }
 
@@ -555,7 +559,6 @@ abstract class _$AppErrorEventCopyWith<$Res> {
   factory _$AppErrorEventCopyWith(
           _AppErrorEvent value, $Res Function(_AppErrorEvent) then) =
       __$AppErrorEventCopyWithImpl<$Res>;
-
   $Res call({String msg});
 }
 

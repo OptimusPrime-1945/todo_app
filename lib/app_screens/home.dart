@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapps/Database/DataBaseService.dart';
-import 'package:todoapps/Models/User.dart';
-import 'package:todoapps/widgets/home_page_drawer.dart';
-import 'package:todoapps/widgets/simple_dialog_box.dart';
-import 'package:todoapps/widgets/todo_list.dart';
+import 'package:todo_app/Database/DataBaseService.dart';
+import 'package:todo_app/models/User.dart';
+import 'package:todo_app/widgets/home_page_drawer.dart';
+import 'package:todo_app/widgets/simple_dialog_box.dart';
+import 'package:todo_app/widgets/todo_list.dart';
 
 class Home extends StatefulWidget {
   final User user;

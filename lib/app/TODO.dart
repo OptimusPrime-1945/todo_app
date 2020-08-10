@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapps/app/app_bloc/app_bloc.dart';
-import 'package:todoapps/providers/AuthProvider.dart';
-import 'package:todoapps/router/router.gr.dart';
-import 'package:todoapps/services/AuthService.dart';
+import 'package:todo_app/app/app_bloc/app_bloc.dart';
+import 'package:todo_app/providers/AuthProvider.dart';
+import 'package:todo_app/router/router.gr.dart';
+import 'package:todo_app/services/AuthService.dart';
 
 class TODO extends StatefulWidget {
   @override

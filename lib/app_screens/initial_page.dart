@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoapps/Database/DataBaseService.dart';
-import 'package:todoapps/Models/User.dart';
-import 'package:todoapps/app/app_bloc/app_bloc.dart';
-import 'package:todoapps/app/app_bloc/bloc.dart';
-import 'package:todoapps/app_screens/home.dart';
+import 'package:todo_app/Database/DataBaseService.dart';
+import 'package:todo_app/app/app_bloc/app_bloc.dart';
+import 'package:todo_app/app/app_bloc/bloc.dart';
+import 'package:todo_app/models/User.dart';
 
+import 'home.dart';
 import 'login_screen.dart';
 
 class InitialPage extends StatelessWidget {

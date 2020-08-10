@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoapps/Models/User.dart';
+import 'package:todo_app/models/User.dart';
 
 import 'bloc.dart';
 

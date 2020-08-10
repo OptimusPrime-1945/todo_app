@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:todoapps/Models/User.dart';
-import 'package:todoapps/app/app_bloc/bloc.dart';
-import 'package:todoapps/services/AuthService.dart';
+import 'package:todo_app/app/app_bloc/bloc.dart';
+import 'package:todo_app/models/User.dart';
+import 'package:todo_app/services/AuthService.dart';
 
 class AuthProvider with ChangeNotifier {
   final AppBloc appBloc;

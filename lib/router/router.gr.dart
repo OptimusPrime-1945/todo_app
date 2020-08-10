@@ -4,10 +4,10 @@
 // AutoRouteGenerator
 // **************************************************************************
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapps/app_screens/initial_page.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:todo_app/app_screens/initial_page.dart';
 
 abstract class Routes {
   static const initialPage = '/';
