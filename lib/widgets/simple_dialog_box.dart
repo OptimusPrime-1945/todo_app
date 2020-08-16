@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:todo_app/Database/DataBaseService.dart';
+import 'package:todo_app/database/DataBaseService.dart';
 import 'package:todo_app/models/ToDo.dart';
 import 'package:todo_app/models/User.dart';
+import 'package:intl/intl.dart';
 
 class SimpleDialogBox extends StatefulWidget {
   final User user;
@@ -80,6 +81,31 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FormBuilderDateTimePicker(
+                    attribute: 'endingDateTime',
+                    initialValue: todo.endingDateTime,
+                    inputType: InputType.both,
+                    validators: [
+                      FormBuilderValidators.required(),
+                          (val) {
+                        if (val.isBefore(DateTime.now())) {
+                          return "Time Should Be Greater than present Time";
+                        }
+                        return null;
+                      }
+                    ],
+                    format: DateFormat("yyyy-MM-dd HH:mm"),
+                    alwaysUse24HourFormat: true,
+                    decoration: InputDecoration(
+                      labelText: "Appointment Time",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -89,12 +115,16 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
               child: Text("Add"),
               onPressed: () {
                 if (_fbsKey.currentState.saveAndValidate()) {
-                  ToDo entry = ToDo.fromJson(_fbsKey.currentState.value);
-                  todo = entry.copyWith(
+//                  ToDo entry = ToDo.fromJson(_fbsKey.currentState.value);
+                  todo = ToDo(
+                    todoTitle: _fbsKey.currentState.value['todoTitle'],
+                    description: _fbsKey.currentState.value['description'],
                     uid: this.todo.uid,
                     docId: this.todo.docId,
                     status: todo.status,
-                    dateTime: DateTime.now(),
+                    createdDateTime: DateTime.now(),
+                    endingDateTime:
+                    _fbsKey.currentState.value['endingDateTime'],
                   );
                   Navigator.pop(context);
                   DataBaseService(uid: user.uid).addTodo(todo);

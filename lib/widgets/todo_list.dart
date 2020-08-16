@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import "package:todo_app/Database/DataBaseService.dart";
+import 'package:todo_app/database/DataBaseService.dart';
 import 'package:todo_app/models/ToDo.dart';
 import 'package:todo_app/models/User.dart';
 import 'package:todo_app/widgets/simple_dialog_box.dart';
@@ -140,7 +140,9 @@ class _TodoListState extends State<TodoList> {
                       ],
                     ),
                   ),
-                  getListTile(DateFormat.yMd().add_jm().format(todo.dateTime),
+                  getListTile(DateFormat.yMd().add_jm().format(todo.createdDateTime),
+                      Icons.timelapse),
+                  getListTile(DateFormat.yMd().add_jm().format(todo.endingDateTime),
                       Icons.timelapse),
                   SizedBox(
                     height: 10.0,

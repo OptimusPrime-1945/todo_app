@@ -12,7 +12,8 @@ abstract class ToDo with _$ToDo {
     bool status,
     String description,
     String uid,
-    DateTime dateTime,
+    DateTime createdDateTime,
+    DateTime endingDateTime,
   }) = _ToDo;
 
   factory ToDo.fromJson(Map<String, dynamic> json) => _$ToDoFromJson(json);

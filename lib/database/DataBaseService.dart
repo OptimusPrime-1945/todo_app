@@ -43,28 +43,6 @@ class DataBaseService {
     return User.fromJson(snapshot.data);
   }
 
-  createTodos(
-      {@required String title,
-      @required String description,
-      @required String uid,
-      @required bool status}) {
-    CollectionReference documentReference = _dataBase.collection("todos");
-    String docId = _dataBase.collection("todos").document().documentID;
-    ToDo toDo = ToDo(
-      todoTitle: title,
-      description: description,
-      uid: uid,
-      status: status,
-      docId: docId,
-      dateTime: DateTime.now(),
-    );
-
-    documentReference
-        .document(docId)
-        .setData(toDo.toJson())
-        .whenComplete(() => print("Created"));
-  }
-
   addTodo(ToDo toDo) {
     CollectionReference collectionReference = _dataBase.collection("todos");
     String docId;

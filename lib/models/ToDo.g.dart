@@ -13,9 +13,12 @@ _$_ToDo _$_$_ToDoFromJson(Map<String, dynamic> json) {
     status: json['status'] as bool,
     description: json['description'] as String,
     uid: json['uid'] as String,
-    dateTime: json['dateTime'] == null
+    createdDateTime: json['createdDateTime'] == null
         ? null
-        : DateTime.parse(json['dateTime'] as String),
+        : DateTime.parse(json['createdDateTime'] as String),
+    endingDateTime: json['endingDateTime'] == null
+        ? null
+        : DateTime.parse(json['endingDateTime'] as String),
   );
 }
 
@@ -25,5 +28,6 @@ Map<String, dynamic> _$_$_ToDoToJson(_$_ToDo instance) => <String, dynamic>{
       'status': instance.status,
       'description': instance.description,
       'uid': instance.uid,
-      'dateTime': instance.dateTime?.toIso8601String(),
+      'createdDateTime': instance.createdDateTime?.toIso8601String(),
+      'endingDateTime': instance.endingDateTime?.toIso8601String(),
     };
