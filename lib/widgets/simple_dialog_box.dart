@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:todo_app/database/DataBaseService.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_app/models/ToDo.dart';
 import 'package:todo_app/models/User.dart';
-import 'package:intl/intl.dart';
+import 'package:todo_app/services/data_base_service.dart';
 
 class SimpleDialogBox extends StatefulWidget {
   final User user;

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/database/DataBaseService.dart';
 import 'package:todo_app/models/ToDo.dart';
 import 'package:todo_app/models/User.dart';
+import 'package:todo_app/services/data_base_service.dart';
 import 'package:todo_app/widgets/simple_dialog_box.dart';
 
 class TodoList extends StatefulWidget {
@@ -77,7 +77,25 @@ class _TodoListState extends State<TodoList> {
               IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
+                  var deletedTodo = todo.copyWith();
                   _dataBaseService.delete(todo.docId);
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Deleted",
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      action: SnackBarAction(
+                        label: "Undo",
+                        onPressed: () => _dataBaseService.addTodo(deletedTodo),
+                      ),
+                    ),
+                  );
                 },
               ),
             ],
@@ -140,9 +158,11 @@ class _TodoListState extends State<TodoList> {
                       ],
                     ),
                   ),
-                  getListTile(DateFormat.yMd().add_jm().format(todo.createdDateTime),
+                  getListTile(
+                      DateFormat.yMd().add_jm().format(todo.createdDateTime),
                       Icons.timelapse),
-                  getListTile(DateFormat.yMd().add_jm().format(todo.endingDateTime),
+                  getListTile(
+                      DateFormat.yMd().add_jm().format(todo.endingDateTime),
                       Icons.timelapse),
                   SizedBox(
                     height: 10.0,
@@ -151,9 +171,7 @@ class _TodoListState extends State<TodoList> {
                     alignment: Alignment.bottomCenter,
                     child: RaisedButton(
                       child: Text("Close"),
-                      color: Theme
-                          .of(context)
-                          .accentColor,
+                      color: Theme.of(context).accentColor,
                       onPressed: () {
                         Navigator.pop(context);
                         _dataBaseService

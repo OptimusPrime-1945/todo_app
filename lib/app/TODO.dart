@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app/app_bloc/app_bloc.dart';
-import 'package:todo_app/providers/AuthProvider.dart';
+import 'package:todo_app/providers/auth_provider.dart';
 import 'package:todo_app/router/router.gr.dart';
-import 'package:todo_app/services/AuthService.dart';
+import 'package:todo_app/services/auth_service.dart';
 
 class TODO extends StatefulWidget {
   @override
