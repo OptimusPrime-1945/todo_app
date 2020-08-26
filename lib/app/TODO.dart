@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:todo_app/app/app_bloc/app_bloc.dart';
 import 'package:todo_app/providers/auth_provider.dart';
 import 'package:todo_app/router/router.gr.dart';
@@ -32,19 +33,40 @@ class _TODOState extends State<TODO> {
               ),
             ),
           ],
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: "Todo app",
-            theme: ThemeData(
-              primaryColor: Colors.blue,
-              accentColor: Colors.blueAccent,
-              buttonTheme: const ButtonThemeData(
-                textTheme: ButtonTextTheme.primary,
-                buttonColor: Colors.blue,
+          child: ThemeProvider(
+            saveThemesOnChange: true,
+            loadThemeOnInit: true,
+            themes: <AppTheme>[
+              AppTheme.light(id: 'light').copyWith(
+                id: 'light',
+                data: ThemeData.light().copyWith(
+                  buttonTheme: ButtonThemeData(
+                    buttonColor: Colors.blue,
+                    textTheme: ButtonTextTheme.primary,
+                  ),
+                ),
               ),
-            ),
-            home: ExtendedNavigator<Router>(
-              router: Router(),
+              AppTheme.dark(id: 'dark').copyWith(
+                id: 'dark',
+                data: ThemeData.dark().copyWith(
+                  buttonTheme: ButtonThemeData(
+                    buttonColor: Colors.tealAccent,
+                    textTheme: ButtonTextTheme.primary,
+                  ),
+                ),
+              ),
+            ],
+            child: ThemeConsumer(
+              child: Builder(
+                builder: (themeContext) => MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  theme: ThemeProvider.themeOf(themeContext).data,
+                  title: 'Todo App',
+                  home: ExtendedNavigator<Router>(
+                    router: Router(),
+                  ),
+                ),
+              ),
             ),
           ),
         ),

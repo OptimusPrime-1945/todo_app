@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
                 text: "Pending",
               ),
               Tab(
-                text: "Not Pending",
+                text: "Completed",
               )
             ],
           ),

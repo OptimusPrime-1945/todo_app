@@ -7,37 +7,28 @@ import 'package:todo_app/services/data_base_service.dart';
 
 class SimpleDialogBox extends StatefulWidget {
   final User user;
-  ToDo toDo;
-  String title;
+  final ToDo todo;
+  final String title;
 
-  SimpleDialogBox({@required this.user, this.toDo, this.title});
+  SimpleDialogBox({@required this.user, this.todo, @required this.title});
 
   @override
-  _SimpleDialogBoxState createState() =>
-      _SimpleDialogBoxState(user, toDo, title);
+  _SimpleDialogBoxState createState() => _SimpleDialogBoxState();
 }
 
 class _SimpleDialogBoxState extends State<SimpleDialogBox> {
   final _fbsKey = GlobalKey<FormBuilderState>();
-  final User user;
-  ToDo todo;
-  String title;
 
-  _SimpleDialogBoxState(this.user, this.todo, this.title);
 
   @override
   Widget build(BuildContext context) {
-    if (this.todo == null) {
-      this.todo = new ToDo(
-          uid: user.uid, todoTitle: "", description: "", status: false);
-    }
     return Container(
       child: SimpleDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         title: Center(
-          child: Text(title),
+          child: Text(widget.title),
         ),
         contentPadding: EdgeInsets.all(10.0),
         children: <Widget>[
@@ -48,7 +39,9 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FormBuilderTextField(
-                    initialValue: todo.todoTitle,
+                    initialValue: widget.todo != null
+                        ? widget.todo.todoTitle
+                        : "",
                     attribute: 'todoTitle',
                     validators: [
                       FormBuilderValidators.required(
@@ -67,7 +60,9 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FormBuilderTextField(
-                    initialValue: todo.description,
+                    initialValue: widget.todo != null
+                        ? widget.todo.description
+                        : "",
                     attribute: 'description',
                     validators: [
                       FormBuilderValidators.required(
@@ -85,7 +80,8 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
                   padding: const EdgeInsets.all(8.0),
                   child: FormBuilderDateTimePicker(
                     attribute: 'endingDateTime',
-                    initialValue: todo.endingDateTime,
+                    initialValue: widget.todo != null ? widget.todo
+                        .endingDateTime : null,
                     inputType: InputType.both,
                     validators: [
                       FormBuilderValidators.required(),
@@ -116,18 +112,18 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
               onPressed: () {
                 if (_fbsKey.currentState.saveAndValidate()) {
 //                  ToDo entry = ToDo.fromJson(_fbsKey.currentState.value);
-                  todo = ToDo(
+                  ToDo entry = ToDo(
                     todoTitle: _fbsKey.currentState.value['todoTitle'],
                     description: _fbsKey.currentState.value['description'],
-                    uid: this.todo.uid,
-                    docId: this.todo.docId,
-                    status: todo.status,
+                    uid: widget.user.uid,
+                    docId: widget.todo != null ? widget.todo.docId : null,
+                    status: widget.todo != null ? widget.todo.status : false,
                     createdDateTime: DateTime.now(),
                     endingDateTime:
                     _fbsKey.currentState.value['endingDateTime'],
                   );
                   Navigator.pop(context);
-                  DataBaseService(uid: user.uid).addTodo(todo);
+                  DataBaseService(uid: widget.user.uid).addTodo(entry);
                 }
               },
             ),

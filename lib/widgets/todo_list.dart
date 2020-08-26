@@ -8,24 +8,21 @@ import 'package:todo_app/services/data_base_service.dart';
 import 'package:todo_app/widgets/simple_dialog_box.dart';
 
 class TodoList extends StatefulWidget {
-  bool pending;
+  final bool pending;
 
   TodoList({@required this.pending});
 
   @override
-  _TodoListState createState() => _TodoListState(pending: this.pending);
+  _TodoListState createState() => _TodoListState();
 }
 
 class _TodoListState extends State<TodoList> {
   DataBaseService _dataBaseService;
   bool isStatus;
-  bool pending;
-
-  _TodoListState({@required this.pending});
 
   @override
   Widget build(BuildContext context) {
-    final todos = Provider.of<List<ToDo>>(context);
+    final todos = getTodosList(Provider.of<List<ToDo>>(context));
     if (todos != null)
       return ListView.builder(
         itemCount: todos.length,
@@ -48,68 +45,64 @@ class _TodoListState extends State<TodoList> {
 
   Widget _listItemBuilder(BuildContext context, ToDo todo) {
     _dataBaseService = DataBaseService(uid: todo.uid);
-    if (this.pending == todo.status) {
-      return Card(
-        child: ListTile(
-          title: Text(
-            todo.todoTitle,
-          ),
-          leading: CircleAvatar(
-            child: Icon(Icons.update),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => SimpleDialogBox(
-                      user: User(uid: todo.uid),
-                      toDo: todo,
-                      title: "Edit Todo",
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  var deletedTodo = todo.copyWith();
-                  _dataBaseService.delete(todo.docId);
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Deleted",
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      action: SnackBarAction(
-                        label: "Undo",
-                        onPressed: () => _dataBaseService.addTodo(deletedTodo),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          onTap: () => showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (context) => _dialogBuilder(context, todo),
-          ),
+    return Card(
+      child: ListTile(
+        title: Text(
+          todo.todoTitle,
         ),
-      );
-    } else {
-      return Container();
-    }
+        leading: CircleAvatar(
+          child: todo.status ? Icon(Icons.check) : Icon(Icons.event_available),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialogBox(
+                    user: User(uid: todo.uid),
+                    todo: todo,
+                    title: "Edit Todo",
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                var deletedTodo = todo.copyWith();
+                _dataBaseService.delete(todo);
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Deleted",
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    action: SnackBarAction(
+                      label: "Undo",
+                      onPressed: () => _dataBaseService.addTodo(deletedTodo),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        onTap: () => showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => _dialogBuilder(context, todo),
+        ),
+      ),
+    );
   }
 
   Widget _dialogBuilder(BuildContext context, ToDo todo) {
@@ -171,7 +164,9 @@ class _TodoListState extends State<TodoList> {
                     alignment: Alignment.bottomCenter,
                     child: RaisedButton(
                       child: Text("Close"),
-                      color: Theme.of(context).accentColor,
+                      color: Theme
+                          .of(context)
+                          .accentColor,
                       onPressed: () {
                         Navigator.pop(context);
                         _dataBaseService
@@ -197,5 +192,15 @@ class _TodoListState extends State<TodoList> {
         mainAxisSize: MainAxisSize.min,
       ),
     );
+  }
+
+  List<ToDo> getTodosList(List<ToDo> todoList) {
+    List<ToDo> temp = new List<ToDo>();
+    if (todoList != null) {
+      todoList.forEach((element) {
+        if (element.status == widget.pending) temp.add(element);
+      });
+    }
+    return temp;
   }
 }

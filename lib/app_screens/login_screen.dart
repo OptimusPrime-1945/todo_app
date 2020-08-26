@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <Widget>[
                 Visibility(
                   visible: widget.isLogin ?? true,
-                  child: SignIn(authProvider),
+                  child: signIn(authProvider),
                 ),
                 Visibility(
                   visible: !widget.isLogin ?? false,
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget SignIn(AuthProvider authProvider) {
+  Widget signIn(AuthProvider authProvider) {
     return Container(
       child: Center(
         child: Column(
