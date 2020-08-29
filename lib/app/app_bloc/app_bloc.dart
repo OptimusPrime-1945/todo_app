@@ -4,8 +4,7 @@ import 'package:todo_app/models/User.dart';
 import 'bloc.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
-  @override
-  AppState get initialState => AppState.started();
+  AppBloc({AppState initialState}) : super(AppState.started());
 
   @override
   Stream<AppState> mapEventToState(AppEvent event) async* {

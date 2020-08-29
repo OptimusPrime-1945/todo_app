@@ -2,16 +2,13 @@ import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/models/User.dart';
+import 'package:todo_app/providers/auth_provider.dart';
 import 'package:todo_app/services/data_base_service.dart';
 import 'package:todo_app/widgets/home_page_drawer.dart';
 import 'package:todo_app/widgets/simple_dialog_box.dart';
 import 'package:todo_app/widgets/todo_list.dart';
 
 class Home extends StatefulWidget {
-  final User user;
-
-  const Home({@required this.user});
-
   @override
   _HomeState createState() => _HomeState();
 }
@@ -19,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<AuthProvider>(context).user;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -40,16 +38,14 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-        drawer: HomePageDrawer(
-          user: widget.user,
-        ),
+        drawer: HomePageDrawer(),
         body: TabBarView(
           children: <Widget>[
             StreamProvider.value(
-                value: DataBaseService(uid: widget.user.uid).todos,
+                value: DataBaseService(uid: user.uid).todos,
                 child: TodoList(pending: false)),
             StreamProvider.value(
-                value: DataBaseService(uid: widget.user.uid).todos,
+                value: DataBaseService(uid: user.uid).todos,
                 child: TodoList(pending: true)),
           ],
         ),
@@ -58,7 +54,7 @@ class _HomeState extends State<Home> {
           onPressed: () => showDialog(
             context: context,
             builder: (context) => SimpleDialogBox(
-              user: widget.user,
+              user: user,
               title: "Add Todo",
             ),
           ),
@@ -69,11 +65,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-//  Future<Widget> _floatingButtonCard() async {
-//    return showDialog(
-//      context: context,
-//      builder: (context) =>
-//    );
-//  }
-//}

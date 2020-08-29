@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
-import 'package:todo_app/app/app_bloc/app_bloc.dart';
+import 'package:todo_app/app/app_cubit/app_cubit.dart';
 import 'package:todo_app/providers/auth_provider.dart';
 import 'package:todo_app/router/router.gr.dart';
 import 'package:todo_app/services/auth_service.dart';
@@ -22,13 +22,13 @@ class _TODOState extends State<TODO> {
           create: (context) => AuthService(),
         ),
       ],
-      child: BlocProvider<AppBloc>(
-        create: (_) => AppBloc(),
+      child: BlocProvider<AppCubit>(
+        create: (_) => AppCubit(),
         child: MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthProvider>(
               create: (context) => AuthProvider(
-                appBloc: BlocProvider.of<AppBloc>(context),
+                appCubit: BlocProvider.of<AppCubit>(context),
                 authService: AuthService(),
               ),
             ),

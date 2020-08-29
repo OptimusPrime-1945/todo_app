@@ -6,10 +6,6 @@ import 'package:todo_app/providers/auth_provider.dart';
 import 'package:todo_app/services/data_base_service.dart';
 
 class HomePageDrawer extends StatefulWidget {
-  final User user;
-
-  HomePageDrawer({@required this.user});
-
   @override
   _HomePageDrawerState createState() => _HomePageDrawerState();
 }
@@ -17,6 +13,7 @@ class HomePageDrawer extends StatefulWidget {
 class _HomePageDrawerState extends State<HomePageDrawer> {
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<AuthProvider>(context).user;
     return WillPopScope(
       onWillPop: () async => false,
       child: StatefulBuilder(builder: (context, setState) {
@@ -26,11 +23,11 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
             child: ListView(
               children: <Widget>[
                 UserAccountsDrawerHeader(
-                  accountName: Text(widget.user.name),
-                  accountEmail: Text(widget.user.email),
+                  accountName: Text(user.name),
+                  accountEmail: Text(user.email),
                   currentAccountPicture: new GestureDetector(
                     child: new CircleAvatar(
-                      backgroundImage: NetworkImage(widget.user.imageURL),
+                      backgroundImage: NetworkImage(user.imageURL),
                     ),
                   ),
                 ),
@@ -38,7 +35,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                   leading: Icon(Icons.restore),
                   title: Text("Restore Deleted Todos"),
                   onTap: () async {
-                    int count = await DataBaseService(uid: widget.user.uid)
+                    int count = await DataBaseService(uid: user.uid)
                         .restoreDeletedTodos();
                     Navigator.pop(context);
                     Scaffold.of(context).showSnackBar(
@@ -48,7 +45,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                           children: [
                             Text(
                               count != 0
-                                  ? "Restored $count Todos"
+                                  ? "Restored $count Todo(s)"
                                   : "No Todos To Restore",
                               textAlign: TextAlign.center,
                             ),

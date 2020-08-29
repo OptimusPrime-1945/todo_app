@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:todo_app/app/app_bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:todo_app/app/app_cubit/app_cubit.dart';
 import 'package:todo_app/models/User.dart';
 import 'package:todo_app/services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
-  final AppBloc appBloc;
+  final AppCubit appCubit;
   final AuthService authService;
   User currentUser;
 
@@ -12,28 +12,30 @@ class AuthProvider with ChangeNotifier {
 
   User get user => currentUser;
 
-  AuthProvider({@required this.appBloc, @required this.authService}) {
+  AuthProvider({@required this.appCubit, @required this.authService}) {
     authService.onAuthStateChanged.listen((User newUser) {
       currentUser = newUser;
       notifyListeners();
       if (isAuthenticated) {
-        appBloc.add(AppEvent.authenticated(currentUser));
+        appCubit.emit(AppState.authenticated(user: currentUser));
       } else {
-        appBloc.add(AppEvent.notAuthenticated());
+        appCubit.emit(
+            AppState.notAuthenticated(isLogin: true, msg: "Not Logged In"));
       }
     });
   }
 
   void signInWithGoogle() async {
-    appBloc.add(AppEvent.loading());
+    appCubit.emit(AppState.loading());
     if (!await authService.signInWithGoogle()) {
-      appBloc.add(AppEvent.error("Login Cancled"));
-      appBloc.add(AppEvent.notAuthenticated());
+      appCubit.emit(AppState.showError(msg: "Login Cancled"));
+      appCubit
+          .emit(AppState.notAuthenticated(isLogin: true, msg: "Not Logged In"));
     } else {
-      appBloc.add(AppEvent.logging());
       if (!await authService.loggingIn()) {
-        appBloc.add(AppEvent.error("Login Failed"));
-        appBloc.add(AppEvent.notAuthenticated());
+        appCubit.emit(AppState.showError(msg: "Login Failed"));
+        appCubit.emit(
+            AppState.notAuthenticated(isLogin: true, msg: "Not Logged In"));
       }
     }
   }
