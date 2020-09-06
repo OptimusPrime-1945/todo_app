@@ -30,18 +30,15 @@ mixin _$ThemeState {
   Result when<Result extends Object>({
     @required Result currentTheme(AppTheme appTheme),
   });
-
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result currentTheme(AppTheme appTheme),
     @required Result orElse(),
   });
-
   @optionalTypeArgs
   Result map<Result extends Object>({
     @required Result currentTheme(_ThemeStateCurrentTheme value),
   });
-
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result currentTheme(_ThemeStateCurrentTheme value),
@@ -55,7 +52,6 @@ abstract class $ThemeStateCopyWith<$Res> {
   factory $ThemeStateCopyWith(
           ThemeState value, $Res Function(ThemeState) then) =
       _$ThemeStateCopyWithImpl<$Res>;
-
   $Res call({AppTheme appTheme});
 }
 
@@ -63,7 +59,6 @@ class _$ThemeStateCopyWithImpl<$Res> implements $ThemeStateCopyWith<$Res> {
   _$ThemeStateCopyWithImpl(this._value, this._then);
 
   final ThemeState _value;
-
   // ignore: unused_field
   final $Res Function(ThemeState) _then;
 
@@ -82,7 +77,6 @@ abstract class _$ThemeStateCurrentThemeCopyWith<$Res>
   factory _$ThemeStateCurrentThemeCopyWith(_ThemeStateCurrentTheme value,
           $Res Function(_ThemeStateCurrentTheme) then) =
       __$ThemeStateCurrentThemeCopyWithImpl<$Res>;
-
   @override
   $Res call({AppTheme appTheme});
 }
@@ -188,7 +182,6 @@ abstract class _ThemeStateCurrentTheme implements ThemeState {
 
   @override
   AppTheme get appTheme;
-
   @override
   _$ThemeStateCurrentThemeCopyWith<_ThemeStateCurrentTheme> get copyWith;
 }

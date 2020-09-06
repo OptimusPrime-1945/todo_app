@@ -39,15 +39,17 @@ class _HomeState extends State<Home> {
           ),
         ),
         drawer: HomePageDrawer(),
-        body: TabBarView(
-          children: <Widget>[
-            StreamProvider.value(
-                value: DataBaseService(uid: user.uid).todos,
-                child: TodoList(pending: false)),
-            StreamProvider.value(
-                value: DataBaseService(uid: user.uid).todos,
-                child: TodoList(pending: true)),
-          ],
+        body: SafeArea(
+          child: TabBarView(
+            children: <Widget>[
+              StreamProvider.value(
+                  value: DataBaseService(uid: user.uid).todos,
+                  child: TodoList(pending: false)),
+              StreamProvider.value(
+                  value: DataBaseService(uid: user.uid).todos,
+                  child: TodoList(pending: true)),
+            ],
+          ),
         ),
         // bottomNavigationBar: BubbledNavigationBarWidget(),
         floatingActionButton: new FloatingActionButton(

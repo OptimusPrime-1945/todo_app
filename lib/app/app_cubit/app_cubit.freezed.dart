@@ -57,7 +57,6 @@ mixin _$AppState {
     @required Result started(),
     @required Result showError(String msg),
   });
-
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result notAuthenticated(bool isLogin, String msg),
@@ -67,7 +66,6 @@ mixin _$AppState {
     Result showError(String msg),
     @required Result orElse(),
   });
-
   @optionalTypeArgs
   Result map<Result extends Object>({
     @required Result notAuthenticated(_AppNotAuthenticatedState value),
@@ -76,7 +74,6 @@ mixin _$AppState {
     @required Result started(_AppStartedState value),
     @required Result showError(_AppErrorState value),
   });
-
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result notAuthenticated(_AppNotAuthenticatedState value),
@@ -97,7 +94,6 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
   _$AppStateCopyWithImpl(this._value, this._then);
 
   final AppState _value;
-
   // ignore: unused_field
   final $Res Function(AppState) _then;
 }
@@ -106,7 +102,6 @@ abstract class _$AppNotAuthenticatedStateCopyWith<$Res> {
   factory _$AppNotAuthenticatedStateCopyWith(_AppNotAuthenticatedState value,
           $Res Function(_AppNotAuthenticatedState) then) =
       __$AppNotAuthenticatedStateCopyWithImpl<$Res>;
-
   $Res call({bool isLogin, String msg});
 }
 
@@ -242,9 +237,7 @@ abstract class _AppNotAuthenticatedState implements AppState {
       _$_AppNotAuthenticatedState;
 
   bool get isLogin;
-
   String get msg;
-
   _$AppNotAuthenticatedStateCopyWith<_AppNotAuthenticatedState> get copyWith;
 }
 
@@ -252,7 +245,6 @@ abstract class _$AppAuthenticatedStateCopyWith<$Res> {
   factory _$AppAuthenticatedStateCopyWith(_AppAuthenticatedState value,
           $Res Function(_AppAuthenticatedState) then) =
       __$AppAuthenticatedStateCopyWithImpl<$Res>;
-
   $Res call({User user});
 
   $UserCopyWith<$Res> get user;
@@ -390,7 +382,6 @@ abstract class _AppAuthenticatedState implements AppState {
       _$_AppAuthenticatedState;
 
   User get user;
-
   _$AppAuthenticatedStateCopyWith<_AppAuthenticatedState> get copyWith;
 }
 
@@ -608,7 +599,6 @@ abstract class _$AppErrorStateCopyWith<$Res> {
   factory _$AppErrorStateCopyWith(
           _AppErrorState value, $Res Function(_AppErrorState) then) =
       __$AppErrorStateCopyWithImpl<$Res>;
-
   $Res call({String msg});
 }
 
@@ -731,6 +721,5 @@ abstract class _AppErrorState implements AppState {
   const factory _AppErrorState({String msg}) = _$_AppErrorState;
 
   String get msg;
-
   _$AppErrorStateCopyWith<_AppErrorState> get copyWith;
 }

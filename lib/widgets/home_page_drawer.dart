@@ -27,7 +27,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                   accountEmail: Text(user.email),
                   currentAccountPicture: new GestureDetector(
                     child: new CircleAvatar(
-                      backgroundImage: NetworkImage(user.imageURL),
+                      backgroundImage: NetworkImage(user.photoURL),
                     ),
                   ),
                 ),
@@ -38,21 +38,23 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                     int count = await DataBaseService(uid: user.uid)
                         .restoreDeletedTodos();
                     Navigator.pop(context);
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              count != 0
-                                  ? "Restored $count Todo(s)"
-                                  : "No Todos To Restore",
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                    Scaffold.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                count != 0
+                                    ? "Restored $count Todo(s)"
+                                    : "No Todo(s) To Restore",
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
+                      );
                   },
                 ),
                 ListTile(

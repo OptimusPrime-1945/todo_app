@@ -164,9 +164,7 @@ class _TodoListState extends State<TodoList> {
                     alignment: Alignment.bottomCenter,
                     child: RaisedButton(
                       child: Text("Close"),
-                      color: Theme
-                          .of(context)
-                          .accentColor,
+                      color: Theme.of(context).accentColor,
                       onPressed: () {
                         Navigator.pop(context);
                         _dataBaseService
@@ -200,7 +198,8 @@ class _TodoListState extends State<TodoList> {
       todoList.forEach((element) {
         if (element.status == widget.pending) temp.add(element);
       });
-    }
-    return temp;
+      return temp;
+    } else
+      return null;
   }
 }

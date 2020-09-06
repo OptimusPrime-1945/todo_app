@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/providers/auth_provider.dart';
-import 'package:todo_app/widgets/loading_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool isLogin;
-  final String msg;
+  final String message;
 
-  LoginScreen({@required this.isLogin, @required this.msg});
+  LoginScreen({@required this.isLogin, @required this.message});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -21,17 +20,32 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Consumer<AuthProvider>(
           builder:
               (BuildContext context, AuthProvider authProvider, Widget child) {
-            return Stack(
-              children: <Widget>[
-                Visibility(
-                  visible: widget.isLogin ?? true,
-                  child: signIn(authProvider),
-                ),
-                Visibility(
-                  visible: !widget.isLogin ?? false,
-                  child: LoadingWidget(),
-                )
-              ],
+            return Center(
+              child: Stack(
+                children: <Widget>[
+                  Visibility(
+                    visible: widget.isLogin ?? true,
+                    child: signIn(authProvider),
+                  ),
+                  Visibility(
+                    visible: !widget.isLogin ?? false,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(widget.message),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             );
           },
         ),
