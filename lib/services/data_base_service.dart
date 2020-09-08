@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/models/ToDo.dart';
 import 'package:todo_app/models/User.dart';
 
+import 'google_calendar_services.dart';
+
 class DataBaseService {
   final FirebaseFirestore _dataBase = FirebaseFirestore.instance;
+  GoogleCalandarServices _googleCalandarServices = GoogleCalandarServices();
   String uid;
 
   DataBaseService({this.uid});
@@ -54,9 +57,9 @@ class DataBaseService {
       );
     }
     if (_dataBase
-        .collection("todosDeleted")
-        .where("docId", isEqualTo: toDo.docId)
-        .get() !=
+            .collection("todosDeleted")
+            .where("docId", isEqualTo: toDo.docId)
+            .get() !=
         null) {
       _dataBase.collection("todosDeleted").doc(toDo.docId).delete();
     }
@@ -64,7 +67,7 @@ class DataBaseService {
         .doc(toDo.docId)
         .set(toDo.toJson())
         .whenComplete(() => print("Created"));
-    // GoogleCalandarServices().insertEvent(toDo);
+    _googleCalandarServices.insertEvent(toDo);
   }
 
   updateTodo(ToDo toDo) {
@@ -98,5 +101,6 @@ class DataBaseService {
           .set(toDo.toJson());
     }
     documentReference.delete().whenComplete(() => print("Deleted"));
+    _googleCalandarServices.deleteEvent(toDo);
   }
 }

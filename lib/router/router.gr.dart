@@ -4,36 +4,35 @@
 // AutoRouteGenerator
 // **************************************************************************
 
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:todo_app/app_screens/initial_page.dart';
+// ignore_for_file: public_member_api_docs
 
-abstract class Routes {
-  static const initialPage = '/';
-  static const all = {
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+
+import '../app_screens/initial_page.dart';
+
+class Routes {
+  static const String initialPage = '/';
+  static const all = <String>{
     initialPage,
   };
 }
 
 class Router extends RouterBase {
   @override
-  Set<String> get allRoutes => Routes.all;
-
-  @Deprecated('call ExtendedNavigator.ofRouter<Router>() directly')
-  static ExtendedNavigatorState get navigator =>
-      ExtendedNavigator.ofRouter<Router>();
+  List<RouteDef> get routes => _routes;
+  final _routes = <RouteDef>[
+    RouteDef(Routes.initialPage, page: InitialPage),
+  ];
 
   @override
-  Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case Routes.initialPage:
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => InitialPage(),
-          settings: settings,
-        );
-      default:
-        return unknownRoutePage(settings.name);
-    }
-  }
+  Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
+  final _pagesMap = <Type, AutoRouteFactory>{
+    InitialPage: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => InitialPage(),
+        settings: data,
+      );
+    },
+  };
 }

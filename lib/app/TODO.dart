@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:todo_app/app/app_cubit/app_cubit.dart';
 import 'package:todo_app/providers/auth_provider.dart';
-import 'package:todo_app/router/router.gr.dart';
+import 'package:todo_app/router/router.gr.dart' as Router;
 import 'package:todo_app/services/auth_service.dart';
 
 class TODO extends StatefulWidget {
@@ -62,8 +62,8 @@ class _TODOState extends State<TODO> {
                   debugShowCheckedModeBanner: false,
                   theme: ThemeProvider.themeOf(themeContext).data,
                   title: 'Todo App',
-                  home: ExtendedNavigator<Router>(
-                    router: Router(),
+                  home: ExtendedNavigator<Router.Router>(
+                    router: Router.Router(),
                   ),
                 ),
               ),
