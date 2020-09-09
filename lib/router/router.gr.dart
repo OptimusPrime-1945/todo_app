@@ -24,7 +24,6 @@ class Router extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.initialPage, page: InitialPage),
   ];
-
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
   final _pagesMap = <Type, AutoRouteFactory>{

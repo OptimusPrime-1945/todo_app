@@ -3,22 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/models/ToDo.dart';
 import 'package:todo_app/models/User.dart';
 
-import 'google_calendar_services.dart';
-
 class DataBaseService {
   final FirebaseFirestore _dataBase = FirebaseFirestore.instance;
-  GoogleCalandarServices _googleCalandarServices = GoogleCalandarServices();
+
+  // GoogleCalandarServices _googleCalandarServices = GoogleCalandarServices();
   String uid;
 
   DataBaseService({this.uid});
 
-  Future updateUserData({@required User user}) async {
-    return await _dataBase.collection("users").doc(user.uid).set({
-      'name': user.name,
-      'email': user.email,
-      'uid': user.uid,
-      'imageURL': user.photoURL
-    });
+  addUser({@required User user}) async {
+    DocumentSnapshot documentSnapshot =
+        await _dataBase.collection('users').doc(user.uid).get();
+    if (documentSnapshot.data() == null) {
+      var entry = user.toJson();
+      entry['registeredTime'] = Timestamp.now();
+      _dataBase.collection('users').doc(user.uid).set(entry);
+    }
+  }
+
+  Future updateUserData({@required User user}) {
+    return _dataBase.collection("users").doc(user.uid).set(user.toJson());
   }
 
   Stream<List<ToDo>> get todos {
@@ -31,7 +35,7 @@ class DataBaseService {
   }
 
   List<ToDo> _todosFromSnapShot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) => ToDo.fromJson(doc.data())).toList();
+    return snapshot.docs.map((doc) => doc?.asToDo()).toList();
   }
 
   Stream<User> get userData {
@@ -46,28 +50,23 @@ class DataBaseService {
   }
 
   addTodo(ToDo toDo) {
-    CollectionReference collectionReference = _dataBase.collection("todos");
-    String docId;
-    if (toDo.docId == null) {
-      docId = _dataBase.collection("todos").doc().id;
-      toDo = toDo.copyWith(
-        uid: uid,
-        status: toDo.status,
-        docId: docId,
-      );
-    }
-    if (_dataBase
-            .collection("todosDeleted")
-            .where("docId", isEqualTo: toDo.docId)
-            .get() !=
-        null) {
-      _dataBase.collection("todosDeleted").doc(toDo.docId).delete();
-    }
-    collectionReference
+    toDo = toDo.copyWith(
+      docId: (toDo.docId == null
+          ? _dataBase
+          .collection("todos")
+          .doc()
+          .id
+          : toDo.docId),
+    );
+    _dataBase.collection("todosDeleted").doc(toDo.docId).delete();
+    var entry = toDo.toJson();
+    entry['createdDateTime'] = Timestamp.fromDate(toDo.createdDateTime);
+    entry['endingDateTime'] = Timestamp.fromDate(toDo.endingDateTime);
+    _dataBase
+        .collection("todos")
         .doc(toDo.docId)
-        .set(toDo.toJson())
+        .set(entry)
         .whenComplete(() => print("Created"));
-    _googleCalandarServices.insertEvent(toDo);
   }
 
   updateTodo(ToDo toDo) {
@@ -88,19 +87,15 @@ class DataBaseService {
   }
 
   void delete(ToDo toDo) {
-    DocumentReference documentReference =
-    _dataBase.collection("todos").doc(toDo.docId);
-    if (_dataBase
+    _dataBase
         .collection("todosDeleted")
-        .where("docId", isEqualTo: toDo.docId)
-        .get() !=
-        null) {
-      _dataBase
-          .collection("todosDeleted")
-          .doc(toDo.docId)
-          .set(toDo.toJson());
-    }
-    documentReference.delete().whenComplete(() => print("Deleted"));
-    _googleCalandarServices.deleteEvent(toDo);
+        .doc(toDo.docId)
+        .set(toDo.toJson())
+        .whenComplete(() => print("Added to DeletedTodos"));
+    _dataBase
+        .collection("todos")
+        .doc(toDo.docId)
+        .delete()
+        .whenComplete(() => print("Deleted"));
   }
 }

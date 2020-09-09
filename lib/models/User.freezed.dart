@@ -17,12 +17,17 @@ class _$UserTearOff {
 
 // ignore: unused_element
   _User call(
-      {@required String uid, String name, String email, String photoURL}) {
+      {@required String uid,
+      String name,
+      String email,
+      String photoURL,
+      DateTime registeredTime}) {
     return _User(
       uid: uid,
       name: name,
       email: email,
       photoURL: photoURL,
+      registeredTime: registeredTime,
     );
   }
 }
@@ -32,18 +37,29 @@ const $User = _$UserTearOff();
 
 mixin _$User {
   String get uid;
+
   String get name;
+
   String get email;
+
   String get photoURL;
 
+  DateTime get registeredTime;
+
   Map<String, dynamic> toJson();
+
   $UserCopyWith<User> get copyWith;
 }
 
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res>;
-  $Res call({String uid, String name, String email, String photoURL});
+  _$UserCopyWithImpl<$Res>;
+
+  $Res call({String uid,
+    String name,
+    String email,
+    String photoURL,
+    DateTime registeredTime});
 }
 
 class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
@@ -59,12 +75,16 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
     Object name = freezed,
     Object email = freezed,
     Object photoURL = freezed,
+    Object registeredTime = freezed,
   }) {
     return _then(_value.copyWith(
       uid: uid == freezed ? _value.uid : uid as String,
       name: name == freezed ? _value.name : name as String,
       email: email == freezed ? _value.email : email as String,
       photoURL: photoURL == freezed ? _value.photoURL : photoURL as String,
+      registeredTime: registeredTime == freezed
+          ? _value.registeredTime
+          : registeredTime as DateTime,
     ));
   }
 }
@@ -72,8 +92,13 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
 abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) then) =
       __$UserCopyWithImpl<$Res>;
+
   @override
-  $Res call({String uid, String name, String email, String photoURL});
+  $Res call({String uid,
+    String name,
+    String email,
+    String photoURL,
+    DateTime registeredTime});
 }
 
 class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
@@ -90,19 +115,27 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
     Object name = freezed,
     Object email = freezed,
     Object photoURL = freezed,
+    Object registeredTime = freezed,
   }) {
     return _then(_User(
       uid: uid == freezed ? _value.uid : uid as String,
       name: name == freezed ? _value.name : name as String,
       email: email == freezed ? _value.email : email as String,
       photoURL: photoURL == freezed ? _value.photoURL : photoURL as String,
+      registeredTime: registeredTime == freezed
+          ? _value.registeredTime
+          : registeredTime as DateTime,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_User implements _User {
-  const _$_User({@required this.uid, this.name, this.email, this.photoURL})
+  const _$_User({@required this.uid,
+    this.name,
+    this.email,
+    this.photoURL,
+    this.registeredTime})
       : assert(uid != null);
 
   factory _$_User.fromJson(Map<String, dynamic> json) =>
@@ -116,10 +149,12 @@ class _$_User implements _User {
   final String email;
   @override
   final String photoURL;
+  @override
+  final DateTime registeredTime;
 
   @override
   String toString() {
-    return 'User(uid: $uid, name: $name, email: $email, photoURL: $photoURL)';
+    return 'User(uid: $uid, name: $name, email: $email, photoURL: $photoURL, registeredTime: $registeredTime)';
   }
 
   @override
@@ -134,7 +169,10 @@ class _$_User implements _User {
                 const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.photoURL, photoURL) ||
                 const DeepCollectionEquality()
-                    .equals(other.photoURL, photoURL)));
+                    .equals(other.photoURL, photoURL)) &&
+            (identical(other.registeredTime, registeredTime) ||
+                const DeepCollectionEquality()
+                    .equals(other.registeredTime, registeredTime)));
   }
 
   @override
@@ -143,7 +181,8 @@ class _$_User implements _User {
       const DeepCollectionEquality().hash(uid) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(email) ^
-      const DeepCollectionEquality().hash(photoURL);
+      const DeepCollectionEquality().hash(photoURL) ^
+      const DeepCollectionEquality().hash(registeredTime);
 
   @override
   _$UserCopyWith<_User> get copyWith =>
@@ -156,11 +195,11 @@ class _$_User implements _User {
 }
 
 abstract class _User implements User {
-  const factory _User(
-      {@required String uid,
-      String name,
-      String email,
-      String photoURL}) = _$_User;
+  const factory _User({@required String uid,
+    String name,
+    String email,
+    String photoURL,
+    DateTime registeredTime}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
@@ -175,6 +214,10 @@ abstract class _User implements User {
 
   @override
   String get photoURL;
+
+  @override
+  DateTime get registeredTime;
+
   @override
   _$UserCopyWith<_User> get copyWith;
 }

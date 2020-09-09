@@ -168,7 +168,7 @@ class _TodoListState extends State<TodoList> {
                       onPressed: () {
                         Navigator.pop(context);
                         _dataBaseService
-                            .updateTodo(todo.copyWith(status: this.isStatus));
+                            .addTodo(todo.copyWith(status: this.isStatus));
                       },
                     ),
                   )

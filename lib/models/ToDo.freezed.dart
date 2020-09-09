@@ -149,7 +149,7 @@ class __$ToDoCopyWithImpl<$Res> extends _$ToDoCopyWithImpl<$Res>
 }
 
 @JsonSerializable()
-class _$_ToDo with DiagnosticableTreeMixin implements _ToDo {
+class _$_ToDo implements _ToDo {
   const _$_ToDo(
       {this.docId,
       this.todoTitle,
@@ -178,22 +178,8 @@ class _$_ToDo with DiagnosticableTreeMixin implements _ToDo {
   final DateTime endingDateTime;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'ToDo(docId: $docId, todoTitle: $todoTitle, status: $status, description: $description, uid: $uid, createdDateTime: $createdDateTime, endingDateTime: $endingDateTime)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'ToDo'))
-      ..add(DiagnosticsProperty('docId', docId))
-      ..add(DiagnosticsProperty('todoTitle', todoTitle))
-      ..add(DiagnosticsProperty('status', status))
-      ..add(DiagnosticsProperty('description', description))
-      ..add(DiagnosticsProperty('uid', uid))
-      ..add(DiagnosticsProperty('createdDateTime', createdDateTime))
-      ..add(DiagnosticsProperty('endingDateTime', endingDateTime));
   }
 
   @override

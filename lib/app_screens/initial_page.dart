@@ -58,7 +58,7 @@ class InitialPage extends StatelessWidget {
                     authenticated: _mapToHomePage,
                     orElse: () => LoginScreen(
                           isLogin: false,
-                          message: "Logging in...",
+                          message: "Logging in",
                         ));
               },
             );
@@ -70,7 +70,7 @@ class InitialPage extends StatelessWidget {
   }
 
   Widget _mapToHomePage(User user) {
-    DataBaseService(uid: user.uid).updateUserData(user: user);
+    DataBaseService(uid: user.uid).addUser(user: user);
     return Home();
   }
 }

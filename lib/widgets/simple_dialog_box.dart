@@ -111,7 +111,6 @@ class _SimpleDialogBoxState extends State<SimpleDialogBox> {
               child: Text("Add"),
               onPressed: () {
                 if (_fbsKey.currentState.saveAndValidate()) {
-//                  ToDo entry = ToDo.fromJson(_fbsKey.currentState.value);
                   ToDo entry = ToDo(
                     todoTitle: _fbsKey.currentState.value['todoTitle'],
                     description: _fbsKey.currentState.value['description'],
