@@ -9,8 +9,9 @@ import 'package:todo_app/widgets/simple_dialog_box.dart';
 
 class TodoList extends StatefulWidget {
   final bool pending;
+  final bool isDeletedPage;
 
-  TodoList({@required this.pending});
+  TodoList({this.pending, this.isDeletedPage = false});
 
   @override
   _TodoListState createState() => _TodoListState();
@@ -46,62 +47,93 @@ class _TodoListState extends State<TodoList> {
   Widget _listItemBuilder(BuildContext context, ToDo todo) {
     _dataBaseService = DataBaseService(uid: todo.uid);
     return Card(
-      child: ListTile(
-        title: Text(
-          todo.todoTitle,
-        ),
-        leading: CircleAvatar(
-          child: todo.status ? Icon(Icons.check) : Icon(Icons.event_available),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => SimpleDialogBox(
-                    user: User(uid: todo.uid),
-                    todo: todo,
-                    title: "Edit Todo",
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                var deletedTodo = todo.copyWith();
-                _dataBaseService.delete(todo);
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Deleted",
-                          textAlign: TextAlign.center,
+      child: !widget.isDeletedPage
+          ? ListTile(
+              title: Text(
+                todo.todoTitle,
+              ),
+              leading: CircleAvatar(
+                child: todo.status
+                    ? Icon(Icons.check)
+                    : Icon(Icons.event_available),
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => SimpleDialogBox(
+                          user: User(uid: todo.uid),
+                          todo: todo,
+                          title: "Edit Todo",
                         ),
-                      ],
-                    ),
-                    action: SnackBarAction(
-                      label: "Undo",
-                      onPressed: () => _dataBaseService.addTodo(deletedTodo),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ],
-        ),
-        onTap: () => showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => _dialogBuilder(context, todo),
-        ),
-      ),
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      var deletedTodo = todo.copyWith();
+                      _dataBaseService.delete(todo);
+                      Scaffold.of(context).removeCurrentSnackBar();
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Deleted",
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                          action: SnackBarAction(
+                            label: "Undo",
+                            onPressed: () =>
+                                _dataBaseService.addTodo(deletedTodo),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              onTap: () => showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) => _dialogBuilder(context, todo),
+              ),
+            )
+          : ListTile(
+              title: Text(
+                todo.todoTitle,
+              ),
+              leading: CircleAvatar(
+                child: todo.status
+                    ? Icon(Icons.check)
+                    : Icon(Icons.event_available),
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.restore),
+                    onPressed: () {
+                      _dataBaseService.restoreDeletedTodo(todo);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () =>
+                        _dataBaseService.deleteTodoPermanently(todo),
+                  ),
+                ],
+              )),
     );
   }
 
@@ -193,13 +225,17 @@ class _TodoListState extends State<TodoList> {
   }
 
   List<ToDo> getTodosList(List<ToDo> todoList) {
-    List<ToDo> temp = new List<ToDo>();
-    if (todoList != null) {
-      todoList.forEach((element) {
-        if (element.status == widget.pending) temp.add(element);
-      });
-      return temp;
-    } else
-      return null;
+    if (!widget.isDeletedPage) {
+      List<ToDo> temp = new List<ToDo>();
+      if (todoList != null) {
+        todoList.forEach((element) {
+          if (element.status == widget.pending) temp.add(element);
+        });
+        return temp;
+      } else
+        return null;
+    } else {
+      return todoList;
+    }
   }
 }

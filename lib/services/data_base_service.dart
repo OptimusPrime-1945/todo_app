@@ -34,6 +34,15 @@ class DataBaseService {
         .map(_todosFromSnapShot);
   }
 
+  Stream<List<ToDo>> get deletedTodos {
+    return FirebaseFirestore.instance
+        .collection("todosDeleted")
+        .where("uid", isEqualTo: this.uid)
+        .orderBy("createdDateTime", descending: true)
+        .snapshots()
+        .map(_todosFromSnapShot);
+  }
+
   List<ToDo> _todosFromSnapShot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) => doc?.asToDo()).toList();
   }
@@ -49,23 +58,17 @@ class DataBaseService {
     return User.fromJson(snapshot.data());
   }
 
-  addTodo(ToDo toDo) {
-    toDo = toDo.copyWith(
-      docId: (toDo.docId == null
-          ? _dataBase
-          .collection("todos")
-          .doc()
-          .id
-          : toDo.docId),
+  addTodo(ToDo todo) {
+    todo = todo.copyWith(
+      docId: (todo.docId == null
+          ? _dataBase.collection("todos").doc().id
+          : todo.docId),
     );
-    _dataBase.collection("todosDeleted").doc(toDo.docId).delete();
-    var entry = toDo.toJson();
-    entry['createdDateTime'] = Timestamp.fromDate(toDo.createdDateTime);
-    entry['endingDateTime'] = Timestamp.fromDate(toDo.endingDateTime);
+    _dataBase.collection("todosDeleted").doc(todo.docId).delete();
     _dataBase
         .collection("todos")
-        .doc(toDo.docId)
-        .set(entry)
+        .doc(todo.docId)
+        .set(_toFirestoreJson(todo))
         .whenComplete(() => print("Created"));
   }
 
@@ -81,21 +84,60 @@ class DataBaseService {
         .where("uid", isEqualTo: this.uid)
         .get();
     documents.docs.forEach((element) {
-      addTodo(ToDo.fromJson(element.data()));
+      addTodo(ToDo.fromJson(element.asToDo().toJson()));
     });
     return documents.docs.length;
   }
 
-  void delete(ToDo toDo) {
+  Map<String, dynamic> _toFirestoreJson(ToDo todo) {
+    var entry = todo.toJson();
+    entry['createdDateTime'] = Timestamp.fromDate(todo.createdDateTime);
+    entry['endingDateTime'] = Timestamp.fromDate(todo.endingDateTime);
+    return entry;
+  }
+
+  restoreDeletedTodo(ToDo todo) async {
+    _dataBase
+        .collection("todos")
+        .doc(todo.docId)
+        .set(_toFirestoreJson(todo))
+        .whenComplete(() => print("Added to Todos"));
     _dataBase
         .collection("todosDeleted")
-        .doc(toDo.docId)
-        .set(toDo.toJson())
+        .doc(todo.docId)
+        .delete()
+        .whenComplete(() => print("Deleted"));
+  }
+
+  void delete(ToDo todo) {
+    _dataBase
+        .collection("todosDeleted")
+        .doc(todo.docId)
+        .set(_toFirestoreJson(todo))
         .whenComplete(() => print("Added to DeletedTodos"));
     _dataBase
         .collection("todos")
-        .doc(toDo.docId)
+        .doc(todo.docId)
         .delete()
         .whenComplete(() => print("Deleted"));
+  }
+
+  void deleteTodoPermanently(ToDo todo) {
+    _dataBase
+        .collection("todosDeleted")
+        .doc(todo.docId)
+        .delete()
+        .whenComplete(() => print("Deleted Permanetly"));
+  }
+
+  deleteTodosPermanently() async {
+    QuerySnapshot querySnapshot = await _dataBase
+        .collection("todosDeleted")
+        .where('uid', isEqualTo: this.uid)
+        .get();
+    querySnapshot.docs.forEach((element) {
+      deleteTodoPermanently(element.asToDo());
+    });
+    return querySnapshot.size;
   }
 }

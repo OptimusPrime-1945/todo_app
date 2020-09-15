@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
+import 'package:todo_app/app_screens/deleted_todo_page.dart';
 import 'package:todo_app/models/User.dart';
 import 'package:todo_app/providers/auth_provider.dart';
-import 'package:todo_app/services/data_base_service.dart';
 
 class HomePageDrawer extends StatefulWidget {
   @override
@@ -32,29 +32,15 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.restore),
-                  title: Text("Restore Deleted Todos"),
-                  onTap: () async {
-                    int count = await DataBaseService(uid: user.uid)
-                        .restoreDeletedTodos();
-                    Navigator.pop(context);
-                    Scaffold.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(
-                        SnackBar(
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                count != 0
-                                    ? "Restored $count Todo(s)"
-                                    : "No Todo(s) To Restore",
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                  leading: Icon(Icons.restore_from_trash),
+                  title: Text("Deleted Todos"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DeletedTodoPage(),
+                      ),
+                    );
                   },
                 ),
                 ListTile(
